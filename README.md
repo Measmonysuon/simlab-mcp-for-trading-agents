@@ -1,4 +1,4 @@
-# Sim Lab — Perpetual Futures Intelligence & Pre-Trade Risk Veto (MCP Server)
+# Sim Lab — Zero-Hallucination Pre-Trade Risk Firewall & Perpetual Futures Intelligence (MCP Server)
 
 <p align="center">
   <img src="assets/simlab-mcp-hero.png" alt="Sim Lab MCP Server — Perpetual Futures Intelligence & Pre-Trade Risk Veto" width="100%">
@@ -8,6 +8,8 @@
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Protocol%202025--07--09-00E599?style=for-the-badge&logo=anthropic&logoColor=black" alt="MCP Protocol"></a>
   <a href="https://www.x402.org"><img src="https://img.shields.io/badge/x402-On--Chain%20Micro--Payments-0052FF?style=for-the-badge&logo=ethereum&logoColor=white" alt="x402 Payments"></a>
   <a href="https://base.org"><img src="https://img.shields.io/badge/Settlement-Base%20Network%20(USDC)-0052FF?style=for-the-badge&logo=coinbase&logoColor=white" alt="Base Network"></a>
+  <a href="#-why-zero-hallucination-ground-truth-matters"><img src="https://img.shields.io/badge/Risk%20Engine-Zero--Hallucination-FF4336?style=for-the-badge" alt="Zero-Hallucination"></a>
+  <a href="#-live-fleet-record--quantitative-telemetry"><img src="https://img.shields.io/badge/Telemetry-Real%20On--Chain%20Data-10B981?style=for-the-badge" alt="Real On-Chain Data"></a>
   <a href="https://github.com/Measmonysuon/simlab-mcp-for-trading-agents/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-F5A623?style=for-the-badge" alt="MIT License"></a>
   <a href="https://t.me/measmonysuon"><img src="https://img.shields.io/badge/Support-Telegram%20%40measmonysuon-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"></a>
 </p>
@@ -18,14 +20,23 @@
 
 > **"Price feeds tell your AI agent what happened. Sim Lab tells it whether it is allowed to act."**
 
-**Sim Lab** is a high-frequency quantitative intelligence layer and pre-trade risk firewall distilled from a live production fleet of autonomous perpetual-futures trading agents. Operating as a standard **Model Context Protocol (MCP)** server over Server-Sent Events (SSE), Sim Lab plugs directly into **Claude Desktop, ChatGPT, Cursor IDE, Windsurf, LangChain**, or any custom Python/Rust autonomous agent framework.
+**Sim Lab** is a high-frequency, **domain-specialized quantitative AI intelligence layer** and **zero-hallucination pre-trade risk firewall** distilled from a live production fleet of autonomous perpetual-futures trading agents. Operating as a standard **Model Context Protocol (MCP)** server over Server-Sent Events (SSE), Sim Lab plugs directly into **Claude Desktop, ChatGPT, Cursor IDE, Windsurf, LangChain**, or custom Python/Rust trading agents.
 
-Before your agent places a perpetual order on any decentralized or centralized exchange (Decibel DEX, Hyperliquid, Binance, etc.), it queries Sim Lab's **4-tier risk firewall**:
+### 🛡️ Why Zero-Hallucination Ground Truth Matters
+Generic Large Language Models (LLMs) are stochastic pattern-matchers prone to hallucinating fictitious support/resistance levels, inventing reasons to rationalize bad setups, and entering positions during institutional trap dumps. 
 
-1. **Market Regime Gate & Macro Freeze** — Is the broader market tradable right now? Automatically stands down agents during high-impact macro releases (CPI, FOMC, PPI) or anomalous market turbulence.
-2. **Pair Directives & Toxic Quarantine** — Instantly vetoes pairs and directional biases proven toxic by fleet historical telemetry.
-3. **Microstructure Liquidity Trap Shield** — Evaluates Volume-Synchronized Probability of Toxicity (VPIN), Level-2 order book depth spoofing, and Cumulative Volume Delta (CVD) flow divergence on the exact planned entry.
-4. **Pre-Trade Check (`pre_trade_check`)** — A single, low-latency ($0.15) call that synthesizes all layers into a definitive `ALLOW` or `VETO` verdict.
+**Sim Lab eliminates agent hallucination** by anchoring decision loops in **real on-chain data** and deterministic quantitative math:
+* **Zero Guesswork**: Trades are audited against live order flow microstructure (VPIN toxicity, resting L2 spoof walls, CVD flow).
+* **Multi-Layer Phase Filtering**: 4 distinct defense layers evaluate macro phase, historical loss quarantine, and liquidity traps before an order touches any venue.
+* **Non-Overridable Veto**: If `pre_trade_check` returns `VETO`, the agent is mathematically barred from order submission.
+
+Before your agent places a perpetual order on any decentralized or centralized exchange (Decibel DEX, Hyperliquid, Binance, etc.), it queries Sim Lab's **multi-layer risk firewall**:
+
+1. **Phase 1: Market Regime Gate & Macro Freeze** — Is the broader macro market tradable right now? Automatically stands down agents during high-impact economic releases (CPI, FOMC, PPI) or extreme volatility regime shockwaves.
+2. **Phase 2: Pair Directives & Toxic Quarantine** — Instantly vetoes pairs and directional biases proven toxic by fleet historical loss telemetry.
+3. **Phase 3: Microstructure Liquidity Trap Shield** — Evaluates Volume-Synchronized Probability of Toxicity (VPIN $\ge 0.35$), Level-2 order book depth spoofing, and Cumulative Volume Delta (CVD) flow divergence on the exact planned entry.
+4. **Phase 4: Deterministic Pre-Trade Veto (`pre_trade_check`)** — A single, sub-second ($0.15) call that synthesizes all layers into an authoritative `ALLOW` or `VETO` verdict.
+5. **Phase 5: Amber Band Dynamic Harvesting (`get_harvest_targets`)** — Replaces rigid static take-profits with dynamic SMA gap harvesting (Tier 1: 30% gap scale-out + breakeven ratchet, Tier 2: 50% midpoint touch exit).
 
 ---
 

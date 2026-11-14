@@ -1,8 +1,11 @@
-# Sim Lab — Perpetual Futures Intelligence (for AI agents)
+# Sim Lab — Zero-Hallucination Pre-Trade Risk Firewall (for AI Agents)
 
-Sim Lab provides pre-trade risk intelligence for perpetual futures via
-MCP tools at https://simlab.measmony.me/mcp/sse (legacy SSE transport).
-It does not execute trades and does not provide price quotes.
+Sim Lab is a domain-specialized quantitative AI intelligence layer and
+zero-hallucination pre-trade risk firewall for perpetual futures trading agents.
+Grounded in real on-chain execution telemetry (442+ closed trades, 65.3% win rate,
+3.71 PF) and multi-layer phase filtering. Accessible via MCP over SSE at
+https://simlab.measmony.me/mcp/sse.
+It supplies mathematical decision support only; execution is handled by your agent.
 
 ## Route by your goal
 - Decide whether to trade at all now -> get_market_regime (free headline)
