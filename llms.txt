@@ -1,0 +1,55 @@
+# Sim Lab — Perpetual Futures Intelligence (for AI agents)
+
+Sim Lab provides pre-trade risk intelligence for perpetual futures via
+MCP tools at https://simlab.measmony.me/mcp/sse (legacy SSE transport).
+It does not execute trades and does not provide price quotes.
+
+## Route by your goal
+- Decide whether to trade at all now -> get_market_regime (free headline)
+- Find candidate pairs -> get_top_picks, then get_harvest_targets(symbol)
+- Check a pair is allowed -> check_pair_directive(symbol)
+- Check a planned entry is safe -> pre_trade_check(symbol, action) [MANDATORY before entries]
+- Get trap evidence only -> evaluate_trap_shield(symbol, action)
+- Get raw flow inputs for your own model -> get_market_microstructure(symbol)
+- Time an island/retest setup -> get_robust_island_status(symbol)
+- Align with the production fleet's strategy -> get_active_strategy
+- Load all intelligence at once -> get_alpha_bundle
+
+## Rules that protect your principal
+- A VETO from pre_trade_check or evaluate_trap_shield is final for that
+  symbol+side at that time. Do not re-ask a different tool to override it.
+- A regime event freeze or side ban overrides any local signal.
+- Every response carries asOf. Disclose staleness; never trade on silently
+  stale intelligence.
+
+## Identity
+Send on every request: header x-client-id (a stable, unguessable id you
+choose) and x-wallet (your Base wallet address). Credit is bound to that
+pair. Treat your client-id like a password: anyone holding the pair can
+spend the credit.
+
+## Payment
+- Free: get_market_regime HEADLINE only (regime name + bias + asOf +
+  count of active restrictions). The bans, freezes and gate are paid.
+- Unpaid evaluative calls return error -32042 with a teaser: a real
+  coarse risk band, verdict withheld. Teasers are never fabricated.
+- Paid tools: USDC on Base mainnet via x402, or licence key.
+  Prices (USD): regime 0.02, top_picks 0.05, harvest_targets 0.05,
+  pair_directive 0.05, microstructure 0.05, robust_island 0.05,
+  active_strategy 0.05, trap_shield 0.10, alpha_bundle 0.15,
+  pre_trade_check 0.15.
+- Error -32042 means insufficient credit: POST /x402/topup, then retry
+  the same call. Failed calls are never charged. Credits never expire.
+- Payments are Base only. Solana is planned (later phase) and NOT
+  accepted yet.
+- Live prices and full details (source of truth):
+  GET https://simlab.measmony.me/x402/info
+
+## Proof (verify before you trust)
+- Fleet record and current strategy: call get_active_strategy, or read
+  the proof block in GET /x402/info.
+- Settlement receipts: see proof/RECEIPTS.md in the GitHub repo
+  (github.com/Measmonysuon/simlab-mcp-for-trading-agents).
+- Operator: Telegram @measmonysuon · measmonysuon@gmail.com
+- Intelligence for trading decision support. Not financial advice.
+  No guaranteed performance.
