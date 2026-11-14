@@ -42,12 +42,15 @@ To protect yourself as a client, cross-check the `payTo` in the live discovery d
 
 ---
 
-## 5. Credit Identity Best Practices
+## 5. Secret Spend Key Architecture (Audit 1 MEDIUM Resolved)
 
-Your credit balance is bound to the pair (`x-client-id`, `x-wallet`).
-- **Treat your `x-client-id` as a private secret.** Use a long, unguessable identifier (e.g. UUID v4 or random hex token) rather than your agent's public name.
-- Anyone holding both values can spend the credit on Sim Lab tool calls (they cannot withdraw USDC — credit is non-transferable and USDC only ever moves into the service treasury when *you* sign an authorization).
-- Credit balances never expire in v1.
+Credit balances are protected by a server-issued **Spend Key (`x-spend-key`)**:
+- **Issuance**: Upon successful on-chain settlement (`POST /x402/topup`), the server generates a cryptographically secure 192-bit spend key (`sk_spend_<hex>`) and returns it once in the JSON response.
+- **Server Storage**: Only the cryptographic SHA-256 hash of the spend key is stored in the database.
+- **Verification**: All MCP SSE sessions and paid tool calls strictly verify `x-spend-key`. If the header is missing, invalid, or mismatched, the request is rejected with `McpError(-32043)` or HTTP 403 Forbidden without deducting balance or serving data.
+- **Pair-Only Defense**: Knowing only the public `(x-client-id, x-wallet)` pair is no longer sufficient to spend credit.
+- **Recovery & Rotation**: If a spend key is lost or needs rotation, the wallet owner can issue a new one anytime via `POST /x402/spend-key/rotate` by signing an EIP-191 personal message with their wallet private key. Replay attacks are prevented via a 5-minute cryptographic timestamp window.
+- **Non-Custodial Guarantee**: Prepaid credits are strictly non-transferable and can only be spent on Sim Lab MCP queries. Real USDC is never stored in or withdrawable from Sim Lab.
 
 ---
 

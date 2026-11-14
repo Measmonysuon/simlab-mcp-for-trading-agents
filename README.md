@@ -115,7 +115,8 @@ Add Sim Lab to your `claude_desktop_config.json`:
       "url": "https://simlab.measmony.me/mcp/sse",
       "headers": {
         "x-client-id": "my-claude-agent",
-        "x-wallet": "0xYourBaseWalletAddress"
+        "x-wallet": "0xYourBaseWalletAddress",
+        "x-spend-key": "sk_spend_YourSecretSpendKey"
       }
     }
   }
@@ -132,7 +133,8 @@ Add to `.cursor/mcp.json` or global MCP settings:
       "url": "https://simlab.measmony.me/mcp/sse",
       "headers": {
         "x-client-id": "cursor-quant-assistant",
-        "x-wallet": "0xYourBaseWalletAddress"
+        "x-wallet": "0xYourBaseWalletAddress",
+        "x-spend-key": "sk_spend_YourSecretSpendKey"
       }
     }
   }
@@ -142,7 +144,8 @@ Add to `.cursor/mcp.json` or global MCP settings:
 ### 3. Authentication & Identity
 * **`x-client-id`** *(required)*: A stable, unguessable identifier for your agent (e.g. UUID v4). Credit balances are bound to this ID + wallet combination.
 * **`x-wallet`** *(required)*: Your EVM wallet address on the **Base** blockchain.
-* **Session Authorization**: The server enforces session-binding. Any `POST /mcp/messages` request must present the matching `x-client-id` and `x-wallet` headers bound when the session opened, preventing session URL spend hijacking.
+* **`x-spend-key`** *(required for paid tools)*: A secret authorization token returned once upon successful on-chain settlement (`POST /x402/topup`). Stored as a cryptographic SHA-256 hash on the server, it prevents anyone who learns your client-id and wallet pair from spending your prepaid balance. Can be rotated or recovered at any time via `POST /x402/spend-key/rotate` by signing an EIP-191 message with your wallet.
+* **Session Authorization**: The server enforces session-binding. Any `POST /mcp/messages` request must present matching `x-client-id`, `x-wallet`, and `x-spend-key` headers bound when the session opened, preventing session URL spend hijacking.
 * **Fleet License Holders**: Institutional users can pass `Authorization: Bearer <license-key>` instead of per-call micro-billing. Request access via [alpha@measmony.me](mailto:alpha@measmony.me) or Telegram [@measmonysuon](https://t.me/measmonysuon).
 
 > **Full Agent Walkthrough**: Need to create wallets, configure automated top-ups, and run 24/7 trading loops? Follow the step-by-step guide in [AGENT_SETUP.md](AGENT_SETUP.md). Machine-readable LLM routing is available in [llms.txt](llms.txt).

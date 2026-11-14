@@ -148,8 +148,12 @@ Credits buy the paid calls. The handshake, exactly as proven live:
    `{x402Version: 2, scheme: "exact", network, accepted, resource,
    payload: {signature, authorization}}`.
 5. Success = **HTTP 200** + a decoded `PAYMENT-RESPONSE` header with
-   `success: true` and a transaction hash. Your USDC moved to Sim Lab's
-   wallet; your credit is bound to your `x-client-id` + Wallet A.
+   `success: true` and a transaction hash. The response JSON body also returns
+   your server-issued **`spendKey`** (e.g. `sk_spend_...`). Store this `spendKey`
+   securely and send it as the **`x-spend-key`** header on all MCP sessions and
+   paid tool calls to authorize deductions against your prepaid balance.
+   If you ever lose your spend key, recover it via `POST /x402/spend-key/rotate`
+   by signing an EIP-191 message with Wallet A.
    A replayed signature is rejected (`409`, nonce already spent) — that
    is by design; generate a fresh authorization for every top-up.
 

@@ -24,11 +24,12 @@ It does not execute trades and does not provide price quotes.
 
 ## Identity & Session Security
 Send on every request (both GET /mcp/sse and all POST /mcp/messages calls):
-header x-client-id (a stable, unguessable id e.g. UUID v4) and x-wallet
-(your Base wallet address). Credit is bound to that pair.
-The server enforces session-binding: any message POST into an active session
-must carry matching headers, preventing session URL spend hijacking.
-Treat your client-id like a password: anyone holding the pair can spend credit.
+header x-client-id (a stable id e.g. UUID v4), x-wallet (your Base wallet address),
+and x-spend-key (secret spend key issued on top-up settlement).
+The server enforces session-binding and spend-key authorization: message POSTs must
+match the bound session, and paid calls require a valid spend key matching the
+cryptographic SHA-256 hash on file. This strictly prevents unauthorized spending even if
+your client-id and wallet pair become known. Rotate or recover key via POST /x402/spend-key/rotate.
 
 ## Payment
 - Free: get_market_regime HEADLINE only (regime name + bias + asOf +
