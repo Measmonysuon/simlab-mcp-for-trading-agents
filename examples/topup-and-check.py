@@ -37,6 +37,7 @@ BASE = "https://simlab.measmony.me"
 CLIENT_ID = os.environ["SIMLAB_CLIENT_ID"]
 PRIVATE_KEY = os.environ["SIMLAB_PRIVATE_KEY"]
 WALLET = Account.from_key(PRIVATE_KEY).address
+SPEND_KEY = os.environ.get("SIMLAB_SPEND_KEY", "").strip()
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -49,6 +50,8 @@ OPENER = urllib.request.build_opener(NoRedirect())
 
 def http(method, url, headers=None, body=None, timeout=60):
     hdrs = {"x-client-id": CLIENT_ID, "x-wallet": WALLET}
+    if SPEND_KEY:
+        hdrs["x-spend-key"] = SPEND_KEY
     if headers:
         hdrs.update(headers)
     data = None
@@ -131,6 +134,10 @@ def topup(pack_usd=1):
                           if k.lower() == "payment-response")
     receipt = json.loads(base64.b64decode(receipt_header))
     assert receipt["success"], f"settlement failed: {receipt}"
+    body_json = json.loads(body)
+    global SPEND_KEY
+    if body_json.get("spendKey"):
+        SPEND_KEY = body_json["spendKey"]
     return receipt["transaction"]
 
 
@@ -141,10 +148,13 @@ class McpSse:
         self.seq = 0
 
     def open(self):
+        hdrs = {"x-client-id": CLIENT_ID, "x-wallet": WALLET,
+                "Accept": "text/event-stream"}
+        if SPEND_KEY:
+            hdrs["x-spend-key"] = SPEND_KEY
         req = urllib.request.Request(
             f"{BASE}/mcp/sse",
-            headers={"x-client-id": CLIENT_ID, "x-wallet": WALLET,
-                     "Accept": "text/event-stream"}, method="GET")
+            headers=hdrs, method="GET")
         self.stream = OPENER.open(req, timeout=30)
         _, data = self._read_event()
         self.messages_url = urllib.parse.urljoin(f"{BASE}/mcp/sse",
@@ -172,10 +182,13 @@ class McpSse:
         payload = {"jsonrpc": "2.0", "method": method, "params": params}
         if not notification:
             payload["id"] = self.seq
+        hdrs = {"x-client-id": CLIENT_ID, "x-wallet": WALLET,
+                "Content-Type": "application/json"}
+        if SPEND_KEY:
+            hdrs["x-spend-key"] = SPEND_KEY
         req = urllib.request.Request(
             self.messages_url, data=json.dumps(payload).encode(),
-            headers={"x-client-id": CLIENT_ID, "x-wallet": WALLET,
-                     "Content-Type": "application/json"}, method="POST")
+            headers=hdrs, method="POST")
         with OPENER.open(req, timeout=60) as resp:
             resp.read()
         if notification:

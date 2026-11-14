@@ -101,7 +101,7 @@ the wrong network or haven't landed; tell your user and wait.
 |---|---|
 | MCP endpoint | `https://simlab.measmony.me/mcp/sse` (legacy SSE transport) |
 | Discovery doc | `GET https://simlab.measmony.me/x402/info` (public, no auth) |
-| Identity headers | `x-client-id: <pick a stable id, e.g. your agent name>` + `x-wallet: <WALLET_A_ADDRESS>` — send both on **every** MCP and x402 request |
+| Identity headers | `x-client-id: <UUID v4>` + `x-wallet: <WALLET_A_ADDRESS>` + `x-spend-key: <SPEND_KEY>` (issued on top-up; omitted for initial free-tier connection) |
 | USDC contract (Base) | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | Payments network | Base mainnet only (`eip155:8453`) — Solana is Phase 2, do not attempt it |
 
@@ -279,8 +279,11 @@ position. Confirm the halt in your reply.
 | Server 400 on top-up | Payload missing `accepted` | Include the chosen accept entry + `resource` (§4) |
 | `409` nonce spent | Signature replayed | Fresh nonce + fresh authorization per top-up |
 | Paid call returns `-32042` | Credit exhausted | Top up (§4), retry the call once |
+| Paid call returns `-32043` | Missing or invalid `x-spend-key` | Pass `spendKey` from top-up (§4). If lost, rotate via `POST /x402/spend-key/rotate` with Wallet A signature |
+| `401` on `/x402/balance` | Balance read without spend key | Pass `x-spend-key` header or `spendKey` parameter |
+| `409` on `/x402/spend-key/rotate` | Rotation signature replayed | Re-sign with fresh millisecond timestamp (±5 min) |
 | Funded wallet still shows 0 | USDC sent on the wrong network | It must be **Base**; other networks are unrecoverable by you — tell your user |
-| MCP connects but no paid data | Missing identity headers | Send `x-client-id` + `x-wallet` on every request |
+| MCP connects but no paid data | Missing identity headers | Send `x-client-id`, `x-wallet`, and `x-spend-key` on requests |
 
 ---
 

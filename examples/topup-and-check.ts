@@ -23,11 +23,16 @@ const BASE_URL = "https://simlab.measmony.me";
 const CLIENT_ID = process.env.SIMLAB_CLIENT_ID!;
 const account = privateKeyToAccount(process.env.SIMLAB_PRIVATE_KEY as `0x${string}`);
 const WALLET = account.address;
+let spendKey = process.env.SIMLAB_SPEND_KEY || "";
 
-const idHeaders = { "x-client-id": CLIENT_ID, "x-wallet": WALLET };
+function getIdHeaders(): Record<string, string> {
+  const h: Record<string, string> = { "x-client-id": CLIENT_ID, "x-wallet": WALLET };
+  if (spendKey) h["x-spend-key"] = spendKey;
+  return h;
+}
 
 async function getBalance(): Promise<number> {
-  const r = await fetch(`${BASE_URL}/x402/balance`, { headers: idHeaders });
+  const r = await fetch(`${BASE_URL}/x402/balance`, { headers: getIdHeaders() });
   const j = (await r.json()) as { balanceMicro: string };
   return Number(j.balanceMicro);
 }
@@ -35,7 +40,7 @@ async function getBalance(): Promise<number> {
 async function topup(packUsd = 1): Promise<string> {
   const res = await fetch(`${BASE_URL}/x402/topup`, {
     method: "POST",
-    headers: { ...idHeaders, "Content-Type": "application/json" },
+    headers: { ...getIdHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ packUsd, clientId: CLIENT_ID }),
   });
   if (res.status !== 402) throw new Error(`expected 402, got ${res.status}`);
@@ -101,7 +106,7 @@ async function topup(packUsd = 1): Promise<string> {
   const res2 = await fetch(`${BASE_URL}/x402/topup`, {
     method: "POST",
     headers: {
-      ...idHeaders,
+      ...getIdHeaders(),
       "Content-Type": "application/json",
       "PAYMENT-SIGNATURE": Buffer.from(JSON.stringify(payload)).toString(
         "base64",
@@ -111,6 +116,11 @@ async function topup(packUsd = 1): Promise<string> {
   });
   if (res2.status !== 200)
     throw new Error(`top-up failed: ${res2.status} ${await res2.text()}`);
+  const res2Data = (await res2.json().catch(() => ({}))) as { spendKey?: string };
+  if (res2Data?.spendKey) {
+    spendKey = res2Data.spendKey;
+    console.log(`[spend-key] Received server spend key: ${spendKey.slice(0, 14)}... (save to SIMLAB_SPEND_KEY)`);
+  }
   const receipt = JSON.parse(
     Buffer.from(res2.headers.get("payment-response")!, "base64").toString(),
   );
@@ -128,7 +138,7 @@ class McpSse {
 
   async open() {
     const res = await fetch(`${BASE_URL}/mcp/sse`, {
-      headers: { ...idHeaders, Accept: "text/event-stream" },
+      headers: { ...getIdHeaders(), Accept: "text/event-stream" },
     });
     const reader = res.body!.getReader();
     const decoder = new TextDecoder();
@@ -184,7 +194,7 @@ class McpSse {
       : new Promise((resolve) => this.byId.set(id, resolve));
     await fetch(this.messagesUrl, {
       method: "POST",
-      headers: { ...idHeaders, "Content-Type": "application/json" },
+      headers: { ...getIdHeaders(), "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
     return p;
