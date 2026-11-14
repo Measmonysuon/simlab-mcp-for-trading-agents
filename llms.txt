@@ -50,6 +50,6 @@ spend the credit.
   the proof block in GET /x402/info.
 - Settlement receipts: see proof/RECEIPTS.md in the GitHub repo
   (github.com/Measmonysuon/simlab-mcp-for-trading-agents).
-- Operator: Telegram @measmonysuon · measmonysuon@gmail.com
+- Operator: Telegram @measmonysuon · alpha@measmony.me
 - Intelligence for trading decision support. Not financial advice.
   No guaranteed performance.
