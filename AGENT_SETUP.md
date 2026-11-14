@@ -290,6 +290,6 @@ profitable ones. Your user's capital is at risk in live mode — that is
 why paper mode, hard caps, and the GO-LIVE gate exist.
 
 *Sim Lab access for fleets/operators (licence key instead of per-call):
-Telegram **@measmonysuon** · **measmonysuon@gmail.com**.*
+Telegram **@measmonysuon** · **alpha@measmony.me**.*
 *Discovery: `GET https://simlab.measmony.me/x402/info` · Landing:
 `https://alpha.measmony.me`.*
