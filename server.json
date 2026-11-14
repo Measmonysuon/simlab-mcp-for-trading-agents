@@ -1,1 +1,37 @@
-{"$schema":"https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json","description":"Zero-hallucination pre-trade risk firewall for AI trading agents. Grounded in real on-chain execution telemetry, multi-layer phase filtering, macro regime lockouts, and institutional trap vetoes before any perpetual futures entry. Pay-per-call in USDC on Base via x402; free headline regime.","name":"io.github.Measmonysuon/simlab-alpha-intelligence","remotes":[{"headers":[{"description":"A stable identifier for your agent. Your Sim Lab credit balance is bound to this id plus your wallet address — keep it stable and unguessable.","isRequired":true,"name":"x-client-id","placeholder":"your-agent-name"},{"description":"Your Base (EVM) wallet address. Used with x-client-id to bind x402 top-up credit. Licence-key holders may send Authorization: Bearer <key> instead.","isRequired":true,"name":"x-wallet","placeholder":"0xYourBaseWalletAddress"},{"description":"Secret spend key issued upon x402 top-up settlement. Required for executing paid MCP tool calls and protecting prepaid balance. Recoverable via POST /x402/spend-key/rotate.","isRequired":false,"name":"x-spend-key","placeholder":"sk_spend_..."}],"type":"sse","url":"https://simlab.measmony.me/mcp/sse"}],"repository":{"source":"github","url":"https://github.com/Measmonysuon/simlab-mcp-for-trading-agents"},"status":"active","version":"1.2.0"}
+{
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+    "description": "Zero-hallucination pre-trade risk firewall for AI trading agents. Grounded in real on-chain execution telemetry, multi-layer phase filtering, macro regime lockouts, and institutional trap vetoes before any perpetual futures entry. Pay-per-call in USDC on Base via x402; free headline regime.",
+    "name": "io.github.Measmonysuon/simlab-alpha-intelligence",
+    "remotes": [
+        {
+            "headers": [
+                {
+                    "description": "A stable identifier for your agent. Your Sim Lab credit balance is bound to this id plus your wallet address — keep it stable and unguessable.",
+                    "isRequired": true,
+                    "name": "x-client-id",
+                    "placeholder": "your-agent-name"
+                },
+                {
+                    "description": "Your Base (EVM) wallet address. Used with x-client-id to bind x402 top-up credit. Licence-key holders may send Authorization: Bearer <key> instead.",
+                    "isRequired": true,
+                    "name": "x-wallet",
+                    "placeholder": "0xYourBaseWalletAddress"
+                },
+                {
+                    "description": "Secret spend key issued upon x402 top-up settlement. Required for executing paid MCP tool calls and protecting prepaid balance. Recoverable via POST /x402/spend-key/rotate.",
+                    "isRequired": false,
+                    "name": "x-spend-key",
+                    "placeholder": "sk_spend_..."
+                }
+            ],
+            "type": "sse",
+            "url": "https://simlab.measmony.me/mcp/sse"
+        }
+    ],
+    "repository": {
+        "source": "github",
+        "url": "https://github.com/Measmonysuon/simlab-mcp-for-trading-agents"
+    },
+    "status": "active",
+    "version": "1.2.0"
+}

@@ -99,7 +99,6 @@ Sim Lab intelligence is not backtested theory — it is generated continuously b
 | **Total Closed Trades** | **442** closed on-chain trades |
 | **Win Rate** | **65.3%** |
 | **Profit Factor** | **3.71** |
-| **Net ROI** | **+68.4%** |
 | **Audit Verification** | Live discovery proof block at `GET https://simlab.measmony.me/x402/info` |
 
 ### Champion Strategy: Dynamic Amber Band Harvest Mechanics
