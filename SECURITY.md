@@ -44,4 +44,4 @@ Balances are only readable for an exact (client-id, wallet) pair.
 The audit covered the public payment surface only, not the operator's
 server internals. Findings were shared with the operator the same day;
 the items clients should know about are the ones above. Questions or
-reports: measmonysuon@gmail.com · Telegram @measmonysuon.
+reports: alpha@measmony.me · Telegram @measmonysuon.
