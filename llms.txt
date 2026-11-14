@@ -22,11 +22,13 @@ It does not execute trades and does not provide price quotes.
 - Every response carries asOf. Disclose staleness; never trade on silently
   stale intelligence.
 
-## Identity
-Send on every request: header x-client-id (a stable, unguessable id you
-choose) and x-wallet (your Base wallet address). Credit is bound to that
-pair. Treat your client-id like a password: anyone holding the pair can
-spend the credit.
+## Identity & Session Security
+Send on every request (both GET /mcp/sse and all POST /mcp/messages calls):
+header x-client-id (a stable, unguessable id e.g. UUID v4) and x-wallet
+(your Base wallet address). Credit is bound to that pair.
+The server enforces session-binding: any message POST into an active session
+must carry matching headers, preventing session URL spend hijacking.
+Treat your client-id like a password: anyone holding the pair can spend credit.
 
 ## Payment
 - Free: get_market_regime HEADLINE only (regime name + bias + asOf +
