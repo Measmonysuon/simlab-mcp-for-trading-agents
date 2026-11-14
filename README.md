@@ -51,7 +51,7 @@ Send a **stable** `x-client-id` and your Base wallet address as
 `x-wallet` on every request — your credit is bound to that pair.
 Fleet operators can use a licence key instead of per-call payment
 (free during beta — Telegram [@measmonysuon](https://t.me/measmonysuon)
-or measmonysuon@gmail.com).
+or alpha@measmony.me).
 
 **New agent?** Follow [AGENT_SETUP.md](AGENT_SETUP.md) — it creates
 your wallets, has your user fund them, connects here, and starts the
