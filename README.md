@@ -36,8 +36,8 @@ Before your agent places a perpetual order on any decentralized or centralized e
 2. **Phase 2: Pair Directives & Toxic Quarantine** — Instantly vetoes pairs and directional biases proven toxic by fleet historical loss telemetry.
 3. **Phase 3: Microstructure Liquidity Trap Shield** — Evaluates Volume-Synchronized Probability of Toxicity (VPIN $\ge 0.35$), Level-2 order book depth spoofing, and Cumulative Volume Delta (CVD) flow divergence on the exact planned entry.
 4. **Phase 4: Deterministic Pre-Trade Veto (`pre_trade_check`)** — A single, sub-second ($0.15) call that synthesizes all layers into an authoritative `ALLOW` or `VETO` verdict.
-5. **Phase 5: Golden Line & Amber Band Dynamic Entry (`get_golden_entry`)** — Calculates dynamic moving baseline, volatility boundaries, retest health (0-100), and invalidation floor. Zero internal formula leakage — returns pure computed numbers ($0.03).
-6. **Phase 6: In-Trade Dynamic Exit Sentinel (`evaluate_dynamic_exit`)** — Replaces rigid static take-profits with dynamic momentum curvature analysis, curve flattening detection, Amber Band piercing, and adaptive trailing stop ratchets ($0.01 per check).
+5. **Phase 5: Golden Line Institutional Entry Precision (`get_golden_entry`)** — Identifies high-probability moving baseline pullbacks, computes live retest absorption health (0–100), and defines strict risk-to-reward boundaries to stop bots from chasing fakeouts or buying falling knives ($0.03).
+6. **Phase 6: Autonomous In-Trade Profit Guardian (`evaluate_dynamic_exit`)** — Continuously monitors open positions to lock in partial profits during momentum peaks and automatically ratchets trailing stops to secure risk-free runners without rigid static take-profits ($0.01 per check).
 
 ---
 
@@ -170,8 +170,8 @@ Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base**. The market
 | Tool | Price (USDC) | Purpose & Decision Output |
 |---|---|---|
 | `get_market_regime` | **Headline: FREE**<br>Full: $0.02 | Global market condition, trend direction, volatility tier, active macro event freezes, and confidence gate. |
-| `evaluate_dynamic_exit` | **$0.01** | **Dynamic Exit Sentinel**: Re-called during an active trade to evaluate curve flattening, Amber Band piercing, and ratchet adaptive trailing stops. No rigid static DEX targets. |
-| `get_golden_entry` | **$0.03** | **Golden Line & Amber Band**: Computes dynamic moving baseline, volatility boundaries, retest health (0-100), and hard risk floors. Pure computed institutional numbers (zero formula leakage). |
+| `evaluate_dynamic_exit` | **$0.01** | **Autonomous Profit Guardian**: Re-called during an active trade to lock in partial gains at momentum peaks and automatically ratchet adaptive trailing stops to secure risk-free runners. |
+| `get_golden_entry` | **$0.03** | **Institutional Golden Line Entry**: Pinpoints high-probability moving baseline pullbacks, computes live retest absorption health (0–100), and defines strict risk-to-reward boundaries. |
 | `pre_trade_check` | **$0.15** | **The Master Gate**: Synthesizes regime, toxic quarantine, and trap shield into a single `ALLOW` or `VETO` verdict for a planned entry. |
 | `evaluate_trap_shield` | **$0.10** | Evaluates VPIN order flow toxicity, bid-ask depth imbalance, and CVD divergence for a specific symbol and entry price. |
 | `get_alpha_bundle` | **$0.15** | Downloads the complete alpha intelligence package (regime, all pair directives, top picks, and macro calendar) in one call. |
