@@ -109,15 +109,16 @@ the wrong network or haven't landed; tell your user and wait.
 
 1. `GET /x402/info` — read the live price table and proof block. Treat this
    document as the source of truth for prices (they can change).
-2. Open the MCP SSE session, `initialize`, `tools/list` — expect 10 tools:
-   `get_market_regime`, `get_alpha_bundle`, `check_pair_directive`,
-   `get_top_picks`, `get_harvest_targets`, `get_robust_island_status`,
+2. Open the MCP SSE session, `initialize`, `tools/list` — expect 12 tools:
+   `get_market_regime`, `get_golden_entry`, `evaluate_dynamic_exit`,
+   `get_alpha_bundle`, `check_pair_directive`, `get_top_picks`,
+   `get_harvest_targets`, `get_robust_island_status`,
    `get_market_microstructure`, `evaluate_trap_shield`,
    `get_active_strategy`, `pre_trade_check`.
 3. Call `get_market_regime` with no balance — you should receive the free
    **headline** (regime name + bias only). That is the free tier working.
 
-✅ *Verify:* tools list has 10 tools and the free headline returns.
+✅ *Verify:* tools list has 12 tools and the free headline returns.
 
 ---
 
@@ -168,7 +169,8 @@ Never loop retries without topping up.
 
 **Prices that matter** (confirm live in `/x402/info`):
 `pre_trade_check` $0.15 · `evaluate_trap_shield` $0.10 ·
-`get_alpha_bundle` $0.15 · most tools $0.05 · full `get_market_regime`
+`get_alpha_bundle` $0.15 · `get_golden_entry` $0.03 ·
+`evaluate_dynamic_exit` $0.01 · most tools $0.05 · full `get_market_regime`
 $0.02 (headline free). Failed/errored calls are not charged.
 
 ---

@@ -1,6 +1,6 @@
 {
     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
-    "description": "Zero-hallucination pre-trade risk firewall for AI trading agents. Grounded in real on-chain execution telemetry, multi-layer phase filtering, macro regime lockouts, and institutional trap vetoes before any perpetual futures entry. Pay-per-call in USDC on Base via x402; free headline regime.",
+    "description": "Zero-hallucination pre-trade risk firewall & Golden Line quantitative intelligence for AI trading agents. Real on-chain telemetry, dynamic SMA Golden Line & Amber Band boundaries, in-trade dynamic exit sentinels, macro regime lockouts, and institutional trap vetoes before any perpetual futures entry. Pay-per-call in USDC on Base via x402; free headline regime.",
     "name": "io.github.Measmonysuon/simlab-alpha-intelligence",
     "remotes": [
         {
@@ -33,5 +33,5 @@
         "url": "https://github.com/Measmonysuon/simlab-mcp-for-trading-agents"
     },
     "status": "active",
-    "version": "1.2.0"
+    "version": "1.3.0"
 }
