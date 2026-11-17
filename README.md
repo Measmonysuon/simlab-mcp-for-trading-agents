@@ -9,7 +9,7 @@
   <a href="https://www.x402.org"><img src="https://img.shields.io/badge/x402-On--Chain%20Micro--Payments-0052FF?style=for-the-badge&logo=ethereum&logoColor=white" alt="x402 Payments"></a>
   <a href="https://base.org"><img src="https://img.shields.io/badge/Settlement-Base%20Network%20(USDC)-0052FF?style=for-the-badge&logo=coinbase&logoColor=white" alt="Base Network"></a>
   <a href="packages/execution-guard"><img src="https://img.shields.io/badge/Execution%20Guard-Fail--Closed-FF4336?style=for-the-badge" alt="Fail-Closed Execution Guard"></a>
-  <a href="proof/FLEET_PERFORMANCE.md"><img src="https://img.shields.io/badge/Fleet%20Audit-442%20Trades%20·%203.71%20PF-10B981?style=for-the-badge" alt="Real Production Telemetry"></a>
+  <a href="proof/FLEET_PERFORMANCE.md"><img src="https://img.shields.io/badge/Fleet%20Telemetry-442%20Trades%20·%203.71%20PF-10B981?style=for-the-badge" alt="Real Production Telemetry"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-F5A623?style=for-the-badge" alt="MIT License"></a>
   <a href="https://t.me/measmonysuon"><img src="https://img.shields.io/badge/Support-Telegram%20%40measmonysuon-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"></a>
 </p>
@@ -109,7 +109,7 @@ Sim Lab intelligence is not backtested theory — it is generated continuously b
 | **Total Closed Trades** | **442** closed on-chain trades |
 | **Win Rate** | **65.3%** |
 | **Profit Factor** | **3.71** |
-| **Audit Verification** | Live discovery proof block at `GET https://simlab.measmony.me/x402/info` |
+| **Telemetry Verification** | Live discovery proof block at `GET https://simlab.measmony.me/x402/info` |
 
 ### Champion Strategy: Dynamic Amber Band Harvest Mechanics
 The champion strategy replaces rigid static Take Profit targets with **Amber Band gap harvesting**:
@@ -293,10 +293,10 @@ npm test  # Runs 10/10 fail-closed & schema validation tests in <200ms
 ## 📚 Technical Documentation & Research Whitepapers
 
 * **[TOOL_SCHEMAS.md](docs/TOOL_SCHEMAS.md)**: Formal JSON Schemas and error taxonomy for all 12 MCP tools.
-* **[FLEET_PERFORMANCE.md](proof/FLEET_PERFORMANCE.md)**: Audited 442-trade production champion record and R&D ablation study.
+* **[FLEET_PERFORMANCE.md](proof/FLEET_PERFORMANCE.md)**: Verified 442-trade production champion record and R&D ablation study.
 * **[COUNTERFACTUAL_VETO.md](proof/COUNTERFACTUAL_VETO.md)**: Live counterfactual shadow veto telemetry (+356.46% net preserved capital edge).
-* **[METHODOLOGY_WHITEPAPER.md](docs/METHODOLOGY_WHITEPAPER.md)**: Academic specification of positive expectancy ($+EV$), Amber Band dynamic harvesting ($\lambda_{30}$), and VPIN toxicity modeling.
-* **[OPERATIONAL_SLA.md](docs/OPERATIONAL_SLA.md)**: Availability SLOs (99.9%), p95 latency targets (<200ms), and failover procedures.
+* **[METHODOLOGY_WHITEPAPER.md](docs/METHODOLOGY_WHITEPAPER.md)**: Quantitative specification of positive expectancy ($+EV$), Amber Band dynamic harvesting ($\lambda_{30}$), and VPIN toxicity modeling.
+* **[OPERATIONAL_SLA.md](docs/OPERATIONAL_SLA.md)**: Availability SLOs (99.9%), p95 latency targets (<200ms), and hourly canary watchdog telemetry.
 
 
 ---

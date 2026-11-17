@@ -1,26 +1,26 @@
-# ⚙️ Sim Lab Operational SLA & System Readiness
+# ⚙️ Sim Lab Operational SLOs & Measured Telemetry
 
-This document defines the operational guarantees, latency service level objectives (SLOs), failover procedures, and incident recovery standards for the Sim Lab MCP intelligence infrastructure.
-
----
-
-## ⚡ Service Level Objectives (SLOs)
-
-| Metric | Target Objective | Production Telemetry |
-| :--- | :---: | :---: |
-| **Availability / Uptime** | **99.9%** | Multi-region redundant host deployment |
-| **p95 Tool Call Latency** | **< 200 ms** | Fast-path cached alpha bundle pipeline |
-| **p99 Tool Call Latency** | **< 500 ms** | Pre-trade evaluation & VPIN calculation |
-| **Data Feed Max Age** | **< 15.0 s** | Real-time WebSocket order book listeners |
-| **Fail-Closed Guarantee** | **100.0%** | Client execution guard rejects on all timeouts |
+This document defines the service level objectives (SLOs), latency benchmarks, failover architecture, and monitoring telemetry for the Sim Lab MCP intelligence infrastructure.
 
 ---
 
-## 🛡️ Failover & Redundancy Architecture
+## ⚡ Service Level Objectives (SLOs) & Measured Benchmarks
+
+| Metric | Target Objective | Measurement Mechanism |
+| :--- | :---: | :--- |
+| **Availability / Uptime** | **99.9%** | Multi-region redundant deployment; verified by hourly canary watchdog. |
+| **p95 Tool Call Latency** | **< 200 ms** | Fast-path cached alpha bundle pipeline (`/api/pipeline/alpha-bundle`). |
+| **p99 Tool Call Latency** | **< 500 ms** | Microstructure toxicity & VPIN calculation pipeline. |
+| **Data Feed Max Age** | **< 15.0 s** | Real-time WebSocket order book listeners; client guard aborts if $>15\text{s}$. |
+| **Fail-Closed Guarantee** | **100.0%** | Client execution guard rejects orders on timeouts, disconnects, or errors. |
+
+---
+
+## 🛡️ Telemetry & Live Verification
 
 * **Primary Endpoint**: `https://simlab.measmony.me/mcp/sse`
-* **Health / Discovery**: `GET https://simlab.measmony.me/.well-known/x402` & `GET /x402/info`
-* **Automated Canary Watchdog**: Runs continuously from independent host nodes every 60 minutes, querying fresh challenges and verifying destination address integrity (`payTo`).
+* **Live Discovery & Telemetry Feed**: `GET https://simlab.measmony.me/commons/feed.json`
+* **Hourly Canary Watchdog**: An automated watchdog runs hourly from independent host tasks, querying live discovery documents from both `simlab.measmony.me` and `alpha.measmony.me` to assert server responsiveness and verify payment destination integrity (`payTo`).
 * **Multi-Venue Oracle Fallback**: Real-time price and order book depth are cross-verified across Pyth Network, Decibel DEX, and Hyperliquid. If any single provider drops, secondary feeds seamlessly take over.
 
 ---
@@ -32,9 +32,9 @@ This document defines the operational guarantees, latency service level objectiv
 
 ---
 
-## 🚨 Incident Response & Status Reporting
+## 🚨 Incident Escalation & Support
 
-* **Status Page & Proof Feed**: Real-time status and regime event flips are streamed live at `https://simlab.measmony.me/commons/feed.json`.
-* **Incident Escalation**:
+* **Status & Regime Stream**: `https://simlab.measmony.me/commons/feed.json`
+* **Direct Escalation**:
   * **Email**: `alpha@measmony.me`
-  * **Telegram Emergency Dispatch**: `@measmonysuon`
+  * **Telegram**: `@measmonysuon`

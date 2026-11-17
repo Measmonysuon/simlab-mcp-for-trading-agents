@@ -1,15 +1,15 @@
-# 📊 Sim Lab Fleet Performance Audit & Ablation Study
-*Last Verified: 2026-11-15 | Data Source: Live Multi-Desk Telemetry (Aptos / Decibel / Arbitrum)*
+# 📊 Sim Lab Fleet Performance Telemetry & Ablation Study
+*Last Verified: 2026-11-15 | Data Source: Published Multi-Desk Telemetry (Aptos / Decibel / Arbitrum)*
 
 ---
 
 ## ⚡ Executive Summary
 
-Sim Lab's quantitative intelligence is not a theoretical backtest. It was forged in live production across a multi-desk fleet of autonomous perpetual futures trading agents.
+Sim Lab's quantitative intelligence is not a theoretical backtest. It was developed and refined across a multi-desk fleet of autonomous perpetual futures trading agents.
 
-To provide complete institutional transparency, this audit is structured into two distinct walk-forward periods:
+To provide complete institutional clarity, this documentation is structured into two distinct walk-forward periods:
 1. **The Production Champion Benchmark (Trades 629 – 1,070 / 442 Closed Trades)**: Performance under the current, frozen **Robust Island V3 + Sim Lab Risk Firewall** architecture.
-2. **The R&D Ablation Study (Trades 1 – 628)**: Analysis of early exploratory trading without the risk firewall, proving why unshielded trading bots suffer structural drawdowns and how the **6 Institutional Invariants** permanently eliminated them.
+2. **The R&D Ablation Study (Trades 1 – 628)**: Analysis of early exploratory trading without the risk firewall, demonstrating why unshielded trading bots suffer structural drawdowns and how the **6 Institutional Invariants** permanently resolved them.
 
 ---
 
@@ -23,7 +23,7 @@ To provide complete institutional transparency, this audit is structured into tw
 
 ### Key Performance Indicators (KPIs)
 
-| Metric | Audited Value | Calculation Methodology |
+| Metric | Published Production Value | Calculation Methodology |
 | :--- | :---: | :--- |
 | **Total Closed Trades** | **442** | Complete round-trip closed positions |
 | **Win Rate ($W$)** | **65.3%** | $\frac{\text{Winning Trades}}{\text{Total Trades}} = \frac{289}{442}$ |
@@ -33,11 +33,11 @@ To provide complete institutional transparency, this audit is structured into tw
 | **Liquidations** | **0** | Strict 1.5x ATR dynamic stop loss + hard disaster stop |
 | **Asset Universe** | **ETH, SOL** (Tier 1) | High-liquidity perp pairs clearing WFE score gate |
 
-### Audited Fee & Slippage Model
+### Production Fee & Slippage Accounting Model
 All figures cited above are **strictly net of real-world friction**:
 * **Exchange Taker / Maker Fees**: 100% of entries utilize **PostOnly Maker orders (`TIF=1`)** with **0.00% maker fee** (or negative rebate where available).
 * **Taker Exits (Emergency / Trailing)**: Deducted at **0.05%** per volume.
-* **Conservative Slippage Deduction**: Simulated at **0.02%** on all dynamic scale-outs.
+* **Conservative Slippage Deduction**: Modeled at **0.02%** on all dynamic scale-outs.
 * **Funding Rate Carry**: Tracked dynamically; positions are vetoed if negative carry exceeds $+0.08\%$ per 8-hour epoch.
 
 ---
@@ -46,7 +46,7 @@ All figures cited above are **strictly net of real-world friction**:
 
 In machine learning and quant research, an **Ablation Study** demonstrates what happens when critical safety components are removed. 
 
-Before deploying the Robust Island Champion and the Sim Lab Pre-Trade Firewall, early fleet iterations (Trades 1 – 628) experienced significant drawdowns during exploratory testing. Rather than hiding these early cycles, we document the exact structural failure modes discovered and the permanent invariant implemented to fix each.
+Before deploying the Robust Island Champion and the Sim Lab Pre-Trade Firewall, early fleet iterations (Trades 1 – 628) experienced significant drawdowns during exploratory testing. Rather than omitting these early cycles, we document the exact structural failure modes discovered and the permanent invariant implemented to fix each.
 
 ### The 4 Major Failure Modes Discovered During R&D
 
@@ -88,5 +88,5 @@ Does the pre-trade risk gate sacrifice profitable trades? To find out, the fleet
 
 ## 📄 Data Availability & Verifiable Telemetry
 
-* **Live Telemetry Feed**: Published continuously at `GET https://simlab.measmony.me/commons/feed.json`.
-* **Anonymized Sample Ledger**: Representative trade records are provided in [proof/trades.sample.json](trades.sample.json).
+* **Live Telemetry Feed**: Published continuously and cross-verifiable at `GET https://simlab.measmony.me/commons/feed.json`.
+* **Illustrative Schema Format**: A representative schema format demonstrating trade fields, scale-out exit tags, and net fee reconciliation is provided in [proof/trades.schema-example.json](trades.schema-example.json).

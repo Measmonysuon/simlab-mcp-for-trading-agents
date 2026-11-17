@@ -1,0 +1,80 @@
+{
+  "$schema": "https://simlab.measmony.me/schemas/trade-record.schema.json",
+  "notice": "ILLUSTRATIVE SCHEMA TEMPLATE: This file provides a structural template demonstrating field definitions, dynamic scale-out tags, and net fee reconciliation for client integrations. For live real-time state, active pair allocations, and verifiable telemetry counters, query the live discovery feed at GET https://simlab.measmony.me/commons/feed.json.",
+  "schemaVersion": "1.3.0",
+  "fields": {
+    "exitType": "DYNAMIC_ISLAND_50%_TOUCH | DYNAMIC_AMBER_BAND_HARVEST | VOLATILITY_SOFT_STOP | BREAKEVEN_RATCHET_EXIT",
+    "status": "WIN | LOSS",
+    "feeAccounting": "All net PnL calculations deduct taker fees (0.05%) and conservative slippage (0.02%)"
+  },
+  "illustrativeRows": [
+    {
+      "id": "trade-template-01",
+      "symbol": "SOL/USD",
+      "side": "LONG",
+      "entryPrice": 148.25,
+      "exitPrice": 152.10,
+      "sizeUsd": 1200.00,
+      "leverage": 4,
+      "durationMinutes": 93,
+      "exitType": "DYNAMIC_ISLAND_50%_TOUCH",
+      "grossPnlPct": 2.597,
+      "feeDragPct": 0.050,
+      "slippagePct": 0.020,
+      "netPnlPct": 2.527,
+      "netPnlUsd": 121.29,
+      "status": "WIN"
+    },
+    {
+      "id": "trade-template-02",
+      "symbol": "ETH/USD",
+      "side": "LONG",
+      "entryPrice": 3120.40,
+      "exitPrice": 3175.80,
+      "sizeUsd": 1500.00,
+      "leverage": 3,
+      "durationMinutes": 160,
+      "exitType": "DYNAMIC_AMBER_BAND_HARVEST",
+      "grossPnlPct": 1.775,
+      "feeDragPct": 0.050,
+      "slippagePct": 0.020,
+      "netPnlPct": 1.705,
+      "netPnlUsd": 76.72,
+      "status": "WIN"
+    },
+    {
+      "id": "trade-template-03",
+      "symbol": "SOL/USD",
+      "side": "SHORT",
+      "entryPrice": 154.60,
+      "exitPrice": 155.95,
+      "sizeUsd": 1000.00,
+      "leverage": 4,
+      "durationMinutes": 43,
+      "exitType": "VOLATILITY_SOFT_STOP",
+      "grossPnlPct": -0.873,
+      "feeDragPct": 0.050,
+      "slippagePct": 0.020,
+      "netPnlPct": -0.943,
+      "netPnlUsd": -37.72,
+      "status": "LOSS"
+    },
+    {
+      "id": "trade-template-04",
+      "symbol": "ETH/USD",
+      "side": "LONG",
+      "entryPrice": 3085.10,
+      "exitPrice": 3132.40,
+      "sizeUsd": 1500.00,
+      "leverage": 3,
+      "durationMinutes": 145,
+      "exitType": "DYNAMIC_ISLAND_50%_TOUCH",
+      "grossPnlPct": 1.533,
+      "feeDragPct": 0.050,
+      "slippagePct": 0.020,
+      "netPnlPct": 1.463,
+      "netPnlUsd": 65.83,
+      "status": "WIN"
+    }
+  ]
+}

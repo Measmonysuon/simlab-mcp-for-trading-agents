@@ -1,5 +1,5 @@
 # 🛡️ Counterfactual Shadow Veto Telemetry & Verification
-*Audited Methodology & Live Counterfactual Shadow Tracking*
+*Empirical Methodology & Live Counterfactual Shadow Tracking*
 
 ---
 
