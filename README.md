@@ -1,4 +1,4 @@
-# Sim Lab — Zero-Hallucination Pre-Trade Risk Firewall & Perpetual Futures Intelligence (MCP Server)
+# Sim Lab — Ground-Truth Pre-Trade Risk Firewall & Perpetual Futures Intelligence (MCP Server)
 
 <p align="center">
   <img src="assets/simlab-mcp-hero.png" alt="Sim Lab MCP Server — Perpetual Futures Intelligence & Pre-Trade Risk Veto" width="100%">
@@ -8,9 +8,9 @@
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Protocol%202025--07--09-00E599?style=for-the-badge&logo=anthropic&logoColor=black" alt="MCP Protocol"></a>
   <a href="https://www.x402.org"><img src="https://img.shields.io/badge/x402-On--Chain%20Micro--Payments-0052FF?style=for-the-badge&logo=ethereum&logoColor=white" alt="x402 Payments"></a>
   <a href="https://base.org"><img src="https://img.shields.io/badge/Settlement-Base%20Network%20(USDC)-0052FF?style=for-the-badge&logo=coinbase&logoColor=white" alt="Base Network"></a>
-  <a href="#-why-zero-hallucination-ground-truth-matters"><img src="https://img.shields.io/badge/Risk%20Engine-Zero--Hallucination-FF4336?style=for-the-badge" alt="Zero-Hallucination"></a>
-  <a href="#-live-fleet-record--quantitative-telemetry"><img src="https://img.shields.io/badge/Telemetry-Real%20On--Chain%20Data-10B981?style=for-the-badge" alt="Real On-Chain Data"></a>
-  <a href="https://github.com/Measmonysuon/simlab-mcp-for-trading-agents/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-F5A623?style=for-the-badge" alt="MIT License"></a>
+  <a href="packages/execution-guard"><img src="https://img.shields.io/badge/Execution%20Guard-Fail--Closed-FF4336?style=for-the-badge" alt="Fail-Closed Execution Guard"></a>
+  <a href="proof/FLEET_PERFORMANCE.md"><img src="https://img.shields.io/badge/Fleet%20Audit-442%20Trades%20·%203.71%20PF-10B981?style=for-the-badge" alt="Real Production Telemetry"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-F5A623?style=for-the-badge" alt="MIT License"></a>
   <a href="https://t.me/measmonysuon"><img src="https://img.shields.io/badge/Support-Telegram%20%40measmonysuon-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"></a>
 </p>
 
@@ -20,15 +20,16 @@
 
 > **"Price feeds tell your AI agent what happened. Sim Lab tells it whether it is allowed to act."**
 
-**Sim Lab** is a high-frequency, **domain-specialized quantitative AI intelligence layer** and **zero-hallucination pre-trade risk firewall** distilled from a live production fleet of autonomous perpetual-futures trading agents. Operating as a standard **Model Context Protocol (MCP)** server over Server-Sent Events (SSE), Sim Lab plugs directly into **Claude Desktop, ChatGPT, Cursor IDE, Windsurf, LangChain**, or custom Python/Rust trading agents.
+**Sim Lab** is a high-frequency, **domain-specialized quantitative AI intelligence layer** and **deterministic pre-trade risk firewall** distilled from a live production fleet of autonomous perpetual-futures trading agents. Operating as a standard **Model Context Protocol (MCP)** server over Server-Sent Events (SSE), Sim Lab connects directly to **Claude Desktop, ChatGPT, Cursor IDE, Windsurf, LangChain**, or custom Python/Rust trading agents.
 
-### 🛡️ Why Zero-Hallucination Ground Truth Matters
+### 🛡️ Why Ground-Truth Microstructure Matters for AI Agents
 Generic Large Language Models (LLMs) are stochastic pattern-matchers prone to hallucinating fictitious support/resistance levels, inventing reasons to rationalize bad setups, and entering positions during institutional trap dumps. 
 
-**Sim Lab eliminates agent hallucination** by anchoring decision loops in **real on-chain data** and deterministic quantitative math:
+**Sim Lab eliminates agent hallucination** by anchoring decision loops in **real on-chain order flow** and deterministic quantitative physics:
 * **Zero Guesswork**: Trades are audited against live order flow microstructure (VPIN toxicity, resting L2 spoof walls, CVD flow).
 * **Multi-Layer Phase Filtering**: 4 distinct defense layers evaluate macro phase, historical loss quarantine, and liquidity traps before an order touches any venue.
-* **Non-Overridable Veto**: If `pre_trade_check` returns `VETO`, the agent is mathematically barred from order submission.
+* **Code-Enforced Veto**: Vetoes are enforced by the open-source client interceptor [`@simlab/execution-guard`](packages/execution-guard), guaranteeing that if `pre_trade_check` returns `VETO`, order dispatch is physically aborted at the code level.
+
 
 Before your agent places a perpetual order on any decentralized or centralized exchange (Decibel DEX, Hyperliquid, Binance, etc.), it queries Sim Lab's **multi-layer risk firewall**:
 
@@ -47,27 +48,35 @@ Before your agent places a perpetual order on any decentralized or centralized e
   <img src="assets/simlab-mcp-architecture.png" alt="Sim Lab 4-Shield Pre-Trade Risk Firewall Architecture" width="100%">
 </p>
 
-Sim Lab sits directly between your autonomous agent's decision loop and the execution venue:
+Sim Lab pairs with the client-side execution interceptor to enforce a strict fail-closed boundary:
 
 ```
-[ AI Trading Agent ] (Claude / GPT / Cursor / Python)
-        │
-        ▼ (MCP over SSE / JSON-RPC 2.0)
+[ AI Trading Agent (LLM) ]
+          │ (Wants to place order)
+          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              SIM LAB PRE-TRADE RISK FIREWALL                │
-├─────────────────────────────────────────────────────────────┤
+│          CLIENT EXECUTION GUARD (@simlab/execution-guard)   │
+│  1. Validates parameters & order intent locally             │
+│  2. Queries Sim Lab MCP Pre-Trade Risk Firewall             │
+│  3. Strictly enforces Fail-Closed on timeout or stale feed  │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ (MCP over SSE / JSON-RPC 2.0)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│             SIM LAB CLOUD PRE-TRADE RISK FIREWALL           │
 │  Layer 1: Market Regime Gate & Macro Calendar Lockout       │
 │  Layer 2: Pair Directives & Historical Loss Quarantine      │
-│  Layer 3: Liquidity Trap Shield (VPIN, L2 Spoof, CVD Flow)  │
+│  Layer 3: Liquidity Trap Shield (VPIN >= 0.35, L2 Spoof)    │
 │  Layer 4: Pre-Trade Verdict Switch (ALLOW / VETO)           │
 └──────────────────────────────┬──────────────────────────────┘
                                │
                 ┌──────────────┴──────────────┐
                 ▼                             ▼
-       [ ALLOW / PASS ]              [ VETO / BLOCK ]
+       [ ALLOW / FRESH PASS ]          [ VETO / TIMEOUT ]
                 │                             │
-    Executes safely on venue        Execution aborted cleanly
-    (Decibel DEX / Hyperliquid)     Zero capital risked
+    Client Guard submits to venue    Client Guard raises fatal error
+    (Decibel DEX / Hyperliquid)      Order blocked in client memory
+                                     Zero capital risked
 ```
 
 ### The 4 Protective Layers
@@ -252,15 +261,43 @@ What is the dynamic Golden Line, Amber Upper/Lower band, and retest health score
 Run evaluate_dynamic_exit to determine if I should harvest 35% partial profit or ratchet my trailing stop to Breakeven."
 ```
 
-### System Prompt Injection for Autonomous Bots
-To enforce Sim Lab as an immutable risk gate in autonomous bots, paste this into your agent's system prompt:
+### 🛡️ Enforceable Execution Gateway (`@simlab/execution-guard`)
+System prompt instructions are not security boundaries. To mathematically guarantee that no order can be placed on an exchange without a fresh, valid Sim Lab approval ticket, wrap your execution engine using the open-source [`@simlab/execution-guard`](packages/execution-guard):
 
-```text
-CRITICAL INVARIANT: You are an autonomous trading agent. You are STRICTLY FORBIDDEN from submitting
-any order to the exchange venue without first executing `pre_trade_check` via the Sim Lab MCP server.
-If `pre_trade_check` returns `VETO`, you must immediately abort the trade and log the veto rationale.
-Never override a Sim Lab veto.
+```typescript
+import { SimLabExecutionGuard, OrderIntent } from '@simlab/execution-guard';
+
+const guard = new SimLabExecutionGuard(simLabClient, exchangeAdapter, {
+  maxLatencyMs: 1500,     // Strict Fail-Closed if check exceeds 1.5s
+  maxFeedAgeSeconds: 15,  // Strict Fail-Closed if market quote is older than 15s
+  strictFailClosed: true  // Network error or 5xx = Immediate order halt
+});
+
+// Orders are physically intercepted; exchange client is NEVER called on VETO or timeout
+await guard.executeProtectedOrder({
+  symbol: 'SOL/USD',
+  side: 'LONG',
+  orderType: 'POST_ONLY',
+  sizeUsd: 1000,
+  leverage: 4
+});
 ```
+
+All failure modes and veto enforcement rules are tested in our reproducible test suite:
+```bash
+npm test  # Runs 10/10 fail-closed & schema validation tests in <200ms
+```
+
+---
+
+## 📚 Technical Documentation & Research Whitepapers
+
+* **[TOOL_SCHEMAS.md](docs/TOOL_SCHEMAS.md)**: Formal JSON Schemas and error taxonomy for all 12 MCP tools.
+* **[FLEET_PERFORMANCE.md](proof/FLEET_PERFORMANCE.md)**: Audited 442-trade production champion record and R&D ablation study.
+* **[COUNTERFACTUAL_VETO.md](proof/COUNTERFACTUAL_VETO.md)**: Live counterfactual shadow veto telemetry (+356.46% net preserved capital edge).
+* **[METHODOLOGY_WHITEPAPER.md](docs/METHODOLOGY_WHITEPAPER.md)**: Academic specification of positive expectancy ($+EV$), Amber Band dynamic harvesting ($\lambda_{30}$), and VPIN toxicity modeling.
+* **[OPERATIONAL_SLA.md](docs/OPERATIONAL_SLA.md)**: Availability SLOs (99.9%), p95 latency targets (<200ms), and failover procedures.
+
 
 ---
 

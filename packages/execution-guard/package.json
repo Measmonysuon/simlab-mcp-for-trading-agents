@@ -1,0 +1,21 @@
+{
+  "name": "@simlab/execution-guard",
+  "version": "1.3.0",
+  "description": "Strict fail-closed pre-trade execution firewall and interceptor for autonomous trading agents using Sim Lab MCP.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "trading",
+    "mcp",
+    "risk-management",
+    "autonomous-agent",
+    "fail-closed",
+    "execution-guard"
+  ],
+  "author": "Sim Lab Fleet Quantitative Systems",
+  "license": "MIT"
+}
