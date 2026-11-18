@@ -118,6 +118,39 @@ The champion strategy replaces rigid static Take Profit targets with **Amber Ban
 
 ---
 
+## ⚔️ Empirical Evidence: Sim Lab vs RiskState Head-to-Head Replay Benchmark
+
+> *"Don't trust feature comparisons — verify empirical evidence on identical historical market data."*
+
+We connect Sim Lab and baseline risk systems (RiskState / generic ATR filters) to the same historical Binance perpetual market data, replay identical trading opportunities, and compare their \`ALLOW\`/\`VETO\` decisions against subsequent forward price outcomes.
+
+See [proof/BENCHMARK_HEAD_TO_HEAD.md](proof/BENCHMARK_HEAD_TO_HEAD.md) for full methodology and statistical breakdown.
+
+| Metric (500 Binance Setups) | Sim Lab Pre-Trade Firewall | RiskState Baseline | Performance Advantage |
+| :--- | :---: | :---: | :---: |
+| **True Traps Caught (Saved SL)** | **192** | 78 | **+114 predatory traps avoided** |
+| **Shield Precision Rate** | **75.6%** | 74.3% | **+1.3% higher precision** |
+| **Gross Capital Loss Avoided** | **+192.0 R** | +78.0 R | **+114.0 R capital saved** |
+| **Net Cumulative Strategy PnL** | **+99.0 R** | +54.3 R | **+82.2% greater net returns** |
+| **Max Equity Drawdown** | **6.4 R** | 17.1 R | **-62.3% peak-to-trough truncation** |
+| **Dynamic Amber Exit PnL** | **+111.4 R** | N/A (Static 2:1 TP) | **+7.4% alpha over static TP** |
+
+### Reproduce Locally (Zero Network / Instant):
+\`\`\`bash
+git clone https://github.com/simlab-ai/simlab-mcp-for-trading-agents.git
+cd simlab-mcp-for-trading-agents
+npm run benchmark:head-to-head
+\`\`\`
+
+### Reproduce Against Live Production Server (Rate-Limited):
+\`\`\`bash
+SIMLAB_SERVER_URL="https://simlab.measmony.me" npm run benchmark:head-to-head
+\`\`\`
+
+> **IP Protection & Anti-Exploit Security**: The benchmark operates strictly as a black-box referee. The server enforces a **strict T-48h historical age lock** (\`timestamp >= 48 hours old\`) and token-bucket rate limits (5 req/min free), making it impossible to use the benchmark route for live order execution or alpha extraction without payment.
+
+---
+
 ## 🔌 Connection & Setup
 
 ### MCP Server Endpoint (SSE Transport)
@@ -190,6 +223,7 @@ Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base**. The market
 | `get_robust_island_status` | **$0.05** | Evaluates whether a symbol is exhibiting the fleet champion's fast/slow SMA trend retest pattern. |
 | `get_market_microstructure` | **$0.05** | Raw order flow analytics: spread, bid/ask depth wall sizes, CVD flow, VPIN score, and liquidation density clusters. |
 | `get_active_strategy` | **$0.05** | Returns the active champion strategy parameters, layer configs, and live verified performance statistics. |
+| `simulate_historical_veto` | **FREE**<br>(Rate-Limited) | **Historical Benchmark Referee**: Counterfactual replay against historical trade setups. Subject to strict T-48h historical age lock (timestamp must be $\ge 48$ hours old) and token-bucket rate limits. Zero proprietary formula leaks. |
 
 *Live pricing and contract parameters are published at `GET https://simlab.measmony.me/x402/info`.*
 

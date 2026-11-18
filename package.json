@@ -4,7 +4,8 @@
   "description": "Zero-hallucination pre-trade risk firewall & quantitative intelligence for AI trading agents.",
   "type": "module",
   "scripts": {
-    "test": "node --test --experimental-strip-types tests/*.test.ts"
+    "test": "node --test --experimental-strip-types tests/*.test.ts",
+    "benchmark:head-to-head": "node --experimental-strip-types benchmarks/head-to-head.ts"
   },
   "keywords": [
     "trading",
