@@ -8,6 +8,7 @@
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Protocol%202025--07--09-00E599?style=for-the-badge&logo=anthropic&logoColor=black" alt="MCP Protocol"></a>
   <a href="https://www.x402.org"><img src="https://img.shields.io/badge/x402-On--Chain%20Micro--Payments-0052FF?style=for-the-badge&logo=ethereum&logoColor=white" alt="x402 Payments"></a>
   <a href="https://base.org"><img src="https://img.shields.io/badge/Settlement-Base%20Network%20(USDC)-0052FF?style=for-the-badge&logo=coinbase&logoColor=white" alt="Base Network"></a>
+  <a href="https://solana.com"><img src="https://img.shields.io/badge/Settlement-Solana%20Pay%20(USDC)-14F195?style=for-the-badge&logo=solana&logoColor=black" alt="Solana Pay"></a>
   <a href="packages/execution-guard"><img src="https://img.shields.io/badge/Execution%20Guard-Fail--Closed-FF4336?style=for-the-badge" alt="Fail-Closed Execution Guard"></a>
   <a href="proof/FLEET_PERFORMANCE.md"><img src="https://img.shields.io/badge/Fleet%20Telemetry-442%20Trades%20·%203.71%20PF-10B981?style=for-the-badge" alt="Real Production Telemetry"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-F5A623?style=for-the-badge" alt="MIT License"></a>
@@ -207,7 +208,7 @@ Add to `.cursor/mcp.json` or global MCP settings:
 
 ## 🛠️ Complete MCP Tool Catalog & Pricing
 
-Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base**. The market regime headline is completely free; actionable intelligence tools are billed per call with zero monthly commitments. **Credits never expire, and failed calls are never charged.**
+Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base & Solana Pay**. The market regime headline is completely free; actionable intelligence tools are billed per call with zero monthly commitments. **Credits never expire, and failed calls are never charged.**
 
 | Tool | Price (USDC) | Purpose & Decision Output |
 |---|---|---|
@@ -231,7 +232,7 @@ Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base**. The market
 
 ## 💳 How On-Chain Payment Works (x402 Protocol)
 
-Sim Lab requires **no accounts, no passwords, and no credit cards**:
+Sim Lab requires **no accounts, no passwords, and no credit cards**. Micro-credits are loaded via on-chain settlement on **Base (EVM)** or **Solana Pay**:
 
 ```
 [ Agent Calls Paid Tool without Credit ]
@@ -257,17 +258,21 @@ Sim Lab requires **no accounts, no passwords, and no credit cards**:
     [ Agent Retries MCP Tool Call -> ALLOW / VETO ]
 ```
 
-1. **Trial & Top-Up Packs**:
+1. **Settlement Networks**:
+   * **Base Network (USDC)** — EIP-3009 gasless `TransferWithAuthorization`. Facilitator settles on-chain.
+   * **Solana Pay (USDC)** — Direct native SPL transfer with sub-second on-chain verification via ephemeral reference keys (`POST /x402/solana/request` & `GET /x402/solana/poll`).
+2. **Trial & Top-Up Packs**:
    * **$1 Trial** — Ideal for testing and single agent setup.
    * **$10 Bot Pack** (+5% bonus credit) — ~70–500 tool calls.
    * **$50 Fleet Pack** (+10% bonus credit) — For multi-agent desks and high-frequency scanners.
-2. **Security & Non-Custodial Safety**:
-   * EIP-3009 authorizations pin the recipient address (`payTo`), exact amount, and single-use cryptographic nonce.
-   * Replayed signatures are mathematically rejected on-chain (`409 Conflict`).
+3. **Security & Non-Custodial Safety**:
+   * EIP-3009 authorizations and Solana Pay reference transfers pin the recipient address (`payTo`), exact amount, and single-use cryptographic nonces/references.
+   * Replayed signatures and transactions are mathematically rejected (`409 Conflict`).
    * Funds cannot be rerouted by intermediaries.
+   * Server-issued `spendKey` (bound to `x-client-id` + wallet) protects against public ID session hijacking.
    * See [proof/RECEIPTS.md](proof/RECEIPTS.md) for live on-chain settlement transactions and [SECURITY.md](SECURITY.md) for the full audit summary.
 
-Working client implementations in Python and TypeScript are available in [examples/](examples/).
+Working client implementations in Python and TypeScript are available in [examples/](examples/) (including [topup-and-check-solana.ts](examples/topup-and-check-solana.ts)).
 
 ---
 
