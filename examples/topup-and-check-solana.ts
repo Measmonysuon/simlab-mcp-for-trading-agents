@@ -23,7 +23,8 @@
 
 const BASE_URL = process.env.SIMLAB_URL || 'https://simlab.measmony.me';
 const CLIENT_ID = process.env.SIMLAB_CLIENT_ID || `solana_agent_${Math.random().toString(36).slice(2, 8)}`;
-const SOLANA_RPC = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
+const IS_DEVNET = (process.env.SOLANA_NETWORK || '').toLowerCase().trim() === 'devnet';
+const SOLANA_RPC = process.env.SOLANA_RPC_URL || (IS_DEVNET ? 'https://api.devnet.solana.com' : 'https://api.mainnet-beta.solana.com');
 
 // ⚠️ Never use the server's receive wallet as payer. Provide your own wallet holding USDC.
 let WALLET = process.env.SIMLAB_SOLANA_WALLET || '';
