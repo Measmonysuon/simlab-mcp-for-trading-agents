@@ -73,11 +73,11 @@ addresses), then **stop and wait** for funding confirmation:
 >
 > | Wallet | Network | Address | Send | Suggested |
 > |---|---|---|---|---|
-> | Intel (Sim Lab data) | **Base** | `<WALLET_A_ADDRESS>` | USDC | $10 |
+> | Intel (Sim Lab data - Base) | **Base** | `<WALLET_A_BASE>` | USDC | $10 |
+> | *or* Intel (Sim Lab data - Solana) | **Solana** | `<WALLET_A_SOLANA>` | USDC (SPL) | $10 |
 > | Trading | `<VENUE_NETWORK>` | `<WALLET_B_ADDRESS>` | `<ASSET>` | your chosen trading capital |
 >
-> ⚠️ Send **USDC on the Base network only** to the Intel wallet — USDC sent
-> on any other network will not arrive and cannot be recovered by the agent.
+> ⚠️ Send **USDC on Base (EVM) or Solana (Solana Pay)** to the designated Intel wallet.
 > The Intel wallet pays for market intelligence per call ($0.02–$0.15);
 > $10 ≈ 60–400 calls. Trading capital stays separate and is never used
 > for data fees.
@@ -103,7 +103,9 @@ the wrong network or haven't landed; tell your user and wait.
 | Discovery doc | `GET https://simlab.measmony.me/x402/info` (public, no auth) |
 | Identity headers | `x-client-id: <UUID v4>` + `x-wallet: <WALLET_A_ADDRESS>` + `x-spend-key: <SPEND_KEY>` (issued on top-up; omitted for initial free-tier connection) |
 | USDC contract (Base) | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
-| Payments network | Base mainnet only (`eip155:8453`) — Solana is Phase 2, do not attempt it |
+| USDC mint (Solana) | `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v` |
+| Payments networks | Base mainnet (`eip155:8453`) & Solana Pay (`solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp`) |
+| Solana Pay endpoints | `POST /x402/solana/request` & `GET /x402/solana/poll` |
 
 **Connect and sample the free tier first:**
 
@@ -126,6 +128,7 @@ the wrong network or haven't landed; tell your user and wait.
 
 Credits buy the paid calls. The handshake, exactly as proven live:
 
+### Option A: Base Network (EIP-3009 Gasless Transfer)
 1. `POST /x402/topup` with headers from §3 and body
    `{"packUsd": 1, "clientId": "<your x-client-id>"}`.
    Packs: **$1** trial · **$10** (+5% bonus credit) · **$50** (+10%).
@@ -149,14 +152,18 @@ Credits buy the paid calls. The handshake, exactly as proven live:
    `{x402Version: 2, scheme: "exact", network, accepted, resource,
    payload: {signature, authorization}}`.
 5. Success = **HTTP 200** + a decoded `PAYMENT-RESPONSE` header with
-   `success: true` and a transaction hash. The response JSON body also returns
-   your server-issued **`spendKey`** (e.g. `sk_spend_...`). Store this `spendKey`
-   securely and send it as the **`x-spend-key`** header on all MCP sessions and
-   paid tool calls to authorize deductions against your prepaid balance.
-   If you ever lose your spend key, recover it via `POST /x402/spend-key/rotate`
-   by signing an EIP-191 message with Wallet A.
-   A replayed signature is rejected (`409`, nonce already spent) — that
-   is by design; generate a fresh authorization for every top-up.
+   `success: true` and a transaction hash. The response JSON body returns
+   your server-issued **`spendKey`** (e.g. `sk_spend_...`).
+
+### Option B: Solana Pay (SPL Native USDC)
+1. `POST /x402/solana/request` with body `{"amountUsd": 1.0, "clientId": "<your x-client-id>", "wallet": "<WALLET_SOLANA>"}`.
+2. The server returns `{ok: true, session: {reference, solanaUrl, recipientAta, amountAtomic}}`.
+3. Scan the `solanaUrl` with Phantom / Solflare, or programmatically execute the SPL transfer with the ephemeral `reference` public key included as a non-signer account (see `examples/topup-and-check-solana.ts`).
+4. Poll `GET /x402/solana/poll?reference=<reference>`. Within ~400ms of on-chain confirmation, the server returns `{ok: true, status: "CONFIRMED", spendKey: "sk_spend_...", balanceMicro: 1000000}`.
+5. Save your server-issued **`spendKey`** to authorize future MCP calls.
+
+Store your `spendKey` securely and send it as the **`x-spend-key`** header on all MCP sessions and paid tool calls.
+If you ever lose your spend key, recover it via `POST /x402/spend-key/rotate`.
 
 Check your balance any time: `GET /x402/balance` (same identity headers).
 
