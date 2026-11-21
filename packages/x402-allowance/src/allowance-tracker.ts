@@ -15,12 +15,12 @@ import {
   FREE_CALLS_PER_MONTH_AFTER_TOPUP,
   FREE_CALLS_PER_HOUR,
   THROTTLED_FREE_CALLS_PER_HOUR,
-} from './constants.ts';
+} from './constants.js';
 import type {
   X402FreeAllowanceRow,
   X402FreeAllowanceStatus,
   X402AbuseLogRow,
-} from './types.ts';
+} from './types.js';
 
 export class FreeAllowanceTracker {
   private allowances: Map<string, X402FreeAllowanceRow> = new Map();
@@ -80,6 +80,7 @@ export class FreeAllowanceTracker {
     network: string,
     wallet: string,
     nowMs: number = Date.now(),
+    walletBalanceMicro: number = 0,
     existingMonthTopupMicro: number = 0
   ): X402FreeAllowanceStatus {
     const normNet = (network || '').trim().toLowerCase();
@@ -87,15 +88,35 @@ export class FreeAllowanceTracker {
     const monthStr = this.getCurrentMonthStr(nowMs);
     const key = `${normNet}:${normWallet}:${monthStr}`;
 
+    // Cryptographic Network Separation
+    const isEvmNet = normNet.startsWith('eip155:');
+    const isSolNet = normNet.startsWith('solana:');
+    const isEvmAddr = normWallet.startsWith('0x') && normWallet.length === 42;
+    const isSolAddr = !normWallet.startsWith('0x') && (normWallet.length >= 32 || normWallet.startsWith('devnet:'));
+
+    if ((isEvmNet && !isEvmAddr) || (isSolNet && !isSolAddr)) {
+      return {
+        qualified: false,
+        totalGranted: 0,
+        remaining: 0,
+        hourlyAllowed: false,
+        hourlyCount: 0,
+        throttled: false,
+        retryAfterSeconds: 0,
+        monthStr,
+      };
+    }
+
     let entry = this.allowances.get(key);
 
-    // Auto-recognize existing top-ups in this calendar month
-    if (!entry && existingMonthTopupMicro >= MIN_TOPUP_FOR_ALLOWANCE_USD * 1e6) {
+    const minRequiredMicro = MIN_TOPUP_FOR_ALLOWANCE_USD * 1e6;
+    // Auto-recognize if wallet maintains balance >= $1 in new month or topped up >= $1 this month
+    if (!entry && (walletBalanceMicro >= minRequiredMicro || existingMonthTopupMicro >= minRequiredMicro)) {
       entry = {
         network: normNet,
         wallet: normWallet,
         month_str: monthStr,
-        topup_total_micro: existingMonthTopupMicro,
+        topup_total_micro: existingMonthTopupMicro || walletBalanceMicro,
         allowance_granted: FREE_CALLS_PER_MONTH_AFTER_TOPUP,
         calls_used: 0,
         is_throttled: 0,

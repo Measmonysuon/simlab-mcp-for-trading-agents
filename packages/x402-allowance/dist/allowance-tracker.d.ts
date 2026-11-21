@@ -19,7 +19,7 @@ export declare class FreeAllowanceTracker {
         qualified: boolean;
         totalGranted: number;
     };
-    checkAllowance(network: string, wallet: string, nowMs?: number, existingMonthTopupMicro?: number): X402FreeAllowanceStatus;
+    checkAllowance(network: string, wallet: string, nowMs?: number, walletBalanceMicro?: number, existingMonthTopupMicro?: number): X402FreeAllowanceStatus;
     consumeAllowance(network: string, wallet: string, clientId: string, tool: string, options?: {
         ip?: string;
         nowMs?: number;
