@@ -1,0 +1,22 @@
+{
+  "name": "@simlab/x402-allowance",
+  "version": "1.3.0",
+  "description": "x402 $1-unlock free allowance subsystem (100 free tool calls/month, pace limiter, abuse watch) for Sim Lab MCP.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "x402",
+    "mcp",
+    "free-allowance",
+    "rate-limiting",
+    "trading-agent",
+    "solana-pay",
+    "base"
+  ],
+  "author": "Sim Lab Fleet Quantitative Systems",
+  "license": "MIT"
+}
