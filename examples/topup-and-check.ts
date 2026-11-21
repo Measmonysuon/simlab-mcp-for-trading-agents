@@ -228,5 +228,8 @@ try {
   verdict = await mcp.callTool("pre_trade_check", { symbol, side });
 }
 console.log(JSON.stringify(verdict, null, 2));
+if (verdict._meta?.freeAllowance || verdict.freeAllowance) {
+  console.log(`🎁 Executed under monthly free allowance! Remaining free calls this month: ${verdict._meta?.freeAllowanceRemaining ?? verdict.freeAllowanceRemaining}`);
+}
 console.log(`credit after: $${((await getBalance()) / 1e6).toFixed(2)}`);
 process.exit(0);
