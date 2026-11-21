@@ -35,19 +35,24 @@ cryptographic SHA-256 hash on file. This strictly prevents unauthorized spending
 your client-id and wallet pair become known. Rotate or recover key via POST /x402/spend-key/rotate.
 
 ## Payment
-- Free: get_market_regime HEADLINE only (regime name + bias + asOf +
-  count of active restrictions). The bans, freezes and gate are paid.
+- Free headline: get_market_regime HEADLINE only (regime name + bias + asOf +
+  count of active restrictions). 300 calls/month cap, keyless.
+- $1 Unlock: Any top-up of $1 or more in a calendar month unlocks 100 free
+  priced tool calls for that month (any priced tool, max 10 free calls/hr per wallet).
+- After the 100 free calls, normal pay-per-call resumes from prepaid credit, then 402.
 - Unpaid evaluative calls return error -32042 with a teaser: a real
   coarse risk band, verdict withheld. Teasers are never fabricated.
-- Paid tools: USDC on Base mainnet via x402, or licence key.
-  Prices (USD): regime 0.02, top_picks 0.05, harvest_targets 0.05,
-  pair_directive 0.05, microstructure 0.05, robust_island 0.05,
-  active_strategy 0.05, trap_shield 0.10, alpha_bundle 0.15,
-  pre_trade_check 0.15.
-- Error -32042 means insufficient credit: POST /x402/topup, then retry
-  the same call. Failed calls are never charged. Credits never expire.
-- Payments are Base only. Solana is planned (later phase) and NOT
-  accepted yet.
+- Paid tools: USDC on Base mainnet via x402, or Solana Pay (SPL USDC), or licence key.
+  Prices (USD): dynamic_exit 0.01, regime 0.02, golden_entry 0.03,
+  top_picks 0.05, harvest_targets 0.05, pair_directive 0.05,
+  microstructure 0.05, robust_island 0.05, active_strategy 0.05,
+  trap_shield 0.10, alpha_bundle 0.15, pre_trade_check 0.15.
+  Historical benchmark (simulate_historical_veto) is free ($0.00).
+- Packs: $1 Trial ($1 in, $1 of credit, plus 100 free calls that month) ·
+  $10 Bot (+5% bonus credit) · $50 Fleet (+10% bonus credit).
+- Error -32042 means insufficient credit: POST /x402/topup (Base) or
+  POST /x402/solana/request (Solana Pay), then retry the call.
+  Credits never expire.
 - Live prices and full details (source of truth):
   GET https://simlab.measmony.me/x402/info
 

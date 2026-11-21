@@ -262,9 +262,9 @@ Sim Lab requires **no accounts, no passwords, and no credit cards**. Micro-credi
    * **Base Network (USDC)** — EIP-3009 gasless `TransferWithAuthorization`. Facilitator settles on-chain.
    * **Solana Pay (USDC)** — Direct native SPL transfer with sub-second on-chain verification via ephemeral reference keys (`POST /x402/solana/request` & `GET /x402/solana/poll`).
 2. **Trial & Top-Up Packs**:
-   * **$1 Trial** — Ideal for testing and single agent setup.
-   * **$10 Bot Pack** (+5% bonus credit) — ~70–500 tool calls.
-   * **$50 Fleet Pack** (+10% bonus credit) — For multi-agent desks and high-frequency scanners.
+   * **$1 Trial** — $1 in, $1 of credit, plus 100 free calls that month (max 10 free calls/hr per wallet).
+   * **$10 Bot Pack** (+5% bonus credit) — $10.50 of credit, plus 100 free calls that month (~70–500 paid calls after allowance).
+   * **$50 Fleet Pack** (+10% bonus credit) — $55.00 of credit, plus 100 free calls that month for multi-agent desks and high-frequency scanners.
 3. **Security & Non-Custodial Safety**:
    * EIP-3009 authorizations and Solana Pay reference transfers pin the recipient address (`payTo`), exact amount, and single-use cryptographic nonces/references.
    * Replayed signatures and transactions are mathematically rejected (`409 Conflict`).

@@ -131,8 +131,8 @@ Credits buy the paid calls. The handshake, exactly as proven live:
 ### Option A: Base Network (EIP-3009 Gasless Transfer)
 1. `POST /x402/topup` with headers from §3 and body
    `{"packUsd": 1, "clientId": "<your x-client-id>"}`.
-   Packs: **$1** trial · **$10** (+5% bonus credit) · **$50** (+10%).
-   Start with $1 to prove your pipeline, then $10 for operations.
+   Packs: **$1 Trial** ($1 in, $1 of credit, plus 100 free calls that month) · **$10 Bot** (+5% bonus credit) · **$50 Fleet** (+10% bonus credit).
+   Start with $1 to prove your pipeline, then $10 for operations. Any top-up ≥ $1 in a calendar month unlocks 100 free priced-tool calls for that month (max 10 free calls/hr per wallet). Once the 100 free calls are used, normal pay-per-call resumes from your credit balance.
 2. The server replies **402** with a `PAYMENT-REQUIRED` header — base64-decode
    it. Choose the `accepts[]` entry with `network: "eip155:8453"`.
 3. Sign an **EIP-3009 `TransferWithAuthorization`** with Wallet A:
