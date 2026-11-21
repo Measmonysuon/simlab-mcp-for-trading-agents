@@ -25,6 +25,7 @@ describe('Sim Lab Free Tier & Allowance Contract Tests', () => {
     assert.equal(allowance.paidToolCallsPerMonth, 100, '100 free calls per month');
     assert.equal(allowance.unlock, 'any top-up of $1 or more in the calendar month');
     assert.equal(allowance.paceLimit, 'none', 'paceLimit is none');
+    assert.equal(allowance.autoRenew, 'balance of $1 or more renews the 100 free calls each month, no top-up needed');
     assert.equal(allowance.resets, 'monthly, 00:00 UTC on the 1st, no rollover');
     assert.equal(allowance.per, 'wallet address (x-wallet), per network');
   });
@@ -145,8 +146,109 @@ describe('Sim Lab Free Tier & Allowance Contract Tests', () => {
       );
       assert.equal(responseMsg.error.data?.freeAllowanceRemaining, 0);
       assert.equal(responseMsg.error.data?.freeAllowanceExhausted, false);
+      assert.equal(Number(responseMsg.error.data?.balanceAtomic), 0);
       assert(responseMsg.error.data?.topup?.includes('/x402/topup'));
       assert(responseMsg.error.data?.topupSolana?.includes('/x402/solana/request'));
+    } finally {
+      clearTimeout(timeout);
+      reader.cancel();
+    }
+  });
+
+  test('HEADLINE: Keyless get_market_regime returns FREE_COARSE headline without burning allowance', async () => {
+    const clientId = `test_headline_${Date.now()}`;
+    const testWallet = '0x1234567890123456789012345678901234567890';
+    let sseRes: Response | null = null;
+    try {
+      sseRes = await fetch(`${SIMLAB_URL}/mcp/sse`, {
+        headers: {
+          'x-client-id': clientId,
+          'x-wallet': testWallet,
+          'Accept': 'text/event-stream',
+        },
+      });
+    } catch (err: any) {
+      console.warn(`[SKIP] Network unavailable for /mcp/sse: ${err.message}`);
+      return;
+    }
+
+    if (!sseRes || sseRes.status !== 200) {
+      console.warn('[SKIP] /mcp/sse unavailable');
+      return;
+    }
+    const reader = sseRes.body!.getReader();
+    const decoder = new TextDecoder();
+    let endpoint = '';
+    let buffer = '';
+
+    const timeout = setTimeout(() => {
+      reader.cancel();
+    }, 15000);
+
+    try {
+      while (!endpoint) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        for (const line of lines) {
+          if (line.startsWith('data: ') && line.includes('/mcp/messages')) {
+            endpoint = line.slice(6).trim();
+            break;
+          }
+        }
+      }
+
+      if (!endpoint) throw new Error('No endpoint');
+      const postUrl = endpoint.startsWith('http') ? endpoint : `${SIMLAB_URL}${endpoint}`;
+      const rpcId = `regime_call_${Date.now()}`;
+
+      await fetch(postUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-client-id': clientId,
+          'x-wallet': testWallet,
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: rpcId,
+          method: 'tools/call',
+          params: {
+            name: 'get_market_regime',
+            arguments: {},
+          },
+        }),
+      });
+
+      let responseMsg: any = null;
+      while (!responseMsg) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split('\n\n');
+        buffer = parts.pop() || '';
+        for (const part of parts) {
+          const dataLine = part.split('\n').find((l) => l.startsWith('data: '));
+          if (dataLine) {
+            try {
+              const parsed = JSON.parse(dataLine.slice(6).trim());
+              if (parsed.id === rpcId) {
+                responseMsg = parsed;
+                break;
+              }
+            } catch {}
+          }
+        }
+      }
+
+      assert(responseMsg, 'Received JSON-RPC response for get_market_regime');
+      assert(!responseMsg.error, `Expected success, got error: ${JSON.stringify(responseMsg.error)}`);
+      const text = responseMsg.result?.content?.[0]?.text;
+      assert(text, 'Result content contains text');
+      const payload = JSON.parse(text);
+      assert.equal(payload.tier, 'FREE_COARSE', 'Must return FREE_COARSE headline');
+      assert(payload.headlineRegime, 'Must contain headlineRegime');
     } finally {
       clearTimeout(timeout);
       reader.cancel();
