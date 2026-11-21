@@ -249,6 +249,11 @@ describe('Sim Lab Free Tier & Allowance Contract Tests', () => {
       const payload = JSON.parse(text);
       assert.equal(payload.tier, 'FREE_COARSE', 'Must return FREE_COARSE headline');
       assert(payload.headlineRegime, 'Must contain headlineRegime');
+      assert.equal(
+        payload.freeTierNotice,
+        'Coarse headline only. Top-up credits via POST /x402/topup for direction bans, event freezes, and entry scoring.'
+      );
+      assert.deepEqual(payload.paidUnlocks, ['directionBans', 'eventFreezes', 'entryScoring', 'cooling']);
     } finally {
       clearTimeout(timeout);
       reader.cancel();

@@ -178,11 +178,34 @@ This document provides formal input/output contracts, parameter constraints, and
 ```json
 {
   "type": "object",
-  "properties": {}
+  "properties": {
+    "tier": {
+      "type": "string",
+      "enum": ["headline", "full"],
+      "description": "Optional tier. 'headline' returns free coarse macro bias (keyless, 300/mo). 'full' returns full actionable regime ($0.02 or 1 free allowance unit). Defaults to 'headline' if unpaid."
+    },
+    "full": {
+      "type": "boolean",
+      "description": "Alias for tier='full'. When true, requests the paid full actionable regime."
+    }
+  }
 }
 ```
 
-#### Output Schema
+#### Output Schema (Free Headline)
+```json
+{
+  "tier": "FREE_COARSE",
+  "headlineRegime": "RISK_ON_BETA" | "BULLISH" | "BEARISH" | "NEUTRAL",
+  "bias": "BULLISH" | "BEARISH" | "NEUTRAL",
+  "asOf": "2026-11-21T09:10:54.238Z",
+  "restrictionsActive": 0,
+  "freeTierNotice": "Coarse headline only. Top-up credits via POST /x402/topup for direction bans, event freezes, and entry scoring.",
+  "paidUnlocks": ["directionBans", "eventFreezes", "entryScoring", "cooling"]
+}
+```
+
+#### Output Schema (Full Unlocked / Paid)
 ```json
 {
   "regime": "SELECTIVE_EXPANSION" | "SIMULTANEOUS_OUTFLOW" | "COMPRESSION_CHOP",
