@@ -24,7 +24,7 @@ describe('Sim Lab Free Tier & Allowance Contract Tests', () => {
     const allowance = doc.freeTier.allowance;
     assert.equal(allowance.paidToolCallsPerMonth, 100, '100 free calls per month');
     assert.equal(allowance.unlock, 'any top-up of $1 or more in the calendar month');
-    assert(allowance.paceLimit.includes('10 free calls'), 'paceLimit mentions 10 free calls');
+    assert.equal(allowance.paceLimit, 'none', 'paceLimit is none');
     assert.equal(allowance.resets, 'monthly, 00:00 UTC on the 1st, no rollover');
     assert.equal(allowance.per, 'wallet address (x-wallet), per network');
   });

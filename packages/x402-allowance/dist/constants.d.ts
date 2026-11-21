@@ -3,8 +3,6 @@
  */
 export declare const MIN_TOPUP_FOR_ALLOWANCE_USD = 1;
 export declare const FREE_CALLS_PER_MONTH_AFTER_TOPUP = 100;
-export declare const FREE_CALLS_PER_HOUR = 10;
-export declare const THROTTLED_FREE_CALLS_PER_HOUR = 2;
 export declare const FREE_ALLOWANCE_DISCOVERY: {
     unlock: string;
     paidToolCallsPerMonth: number;

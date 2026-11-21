@@ -9,7 +9,7 @@
  * 5. Auto-Recognition: Wallets with existing top-ups in the current month automatically qualify.
  * 6. Abuse Watch: Throttles farming/rotation patterns to 2/hour and logs flags.
  */
-import { MIN_TOPUP_FOR_ALLOWANCE_USD, FREE_CALLS_PER_MONTH_AFTER_TOPUP, FREE_CALLS_PER_HOUR, THROTTLED_FREE_CALLS_PER_HOUR, } from './constants.js';
+import { MIN_TOPUP_FOR_ALLOWANCE_USD, FREE_CALLS_PER_MONTH_AFTER_TOPUP, } from './constants.js';
 export class FreeAllowanceTracker {
     allowances = new Map();
     callLogs = new Map();
@@ -107,26 +107,15 @@ export class FreeAllowanceTracker {
                 monthStr,
             };
         }
-        // Pace limit enforcement
-        const hourlyLimit = throttled ? THROTTLED_FREE_CALLS_PER_HOUR : FREE_CALLS_PER_HOUR;
-        const oneHourAgo = nowMs - 3600_000;
-        const callKey = `${normNet}:${normWallet}`;
-        const recentCalls = (this.callLogs.get(callKey) || []).filter((c) => c.ts >= oneHourAgo);
-        const hourlyCount = recentCalls.length;
-        const hourlyAllowed = hourlyCount < hourlyLimit;
-        let retryAfterSeconds = 0;
-        if (!hourlyAllowed && recentCalls.length > 0) {
-            const oldestCall = recentCalls[0].ts;
-            retryAfterSeconds = Math.max(1, Math.ceil((oldestCall + 3600_000 - nowMs) / 1000));
-        }
+        // No pace limit — users can consume their 100 free calls at full speed
         return {
             qualified,
             totalGranted: granted,
             remaining,
-            hourlyAllowed,
-            hourlyCount,
+            hourlyAllowed: true,
+            hourlyCount: 0,
             throttled,
-            retryAfterSeconds,
+            retryAfterSeconds: 0,
             monthStr,
         };
     }

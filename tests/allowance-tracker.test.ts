@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { FreeAllowanceTracker, FREE_CALLS_PER_MONTH_AFTER_TOPUP, FREE_CALLS_PER_HOUR } from '../packages/x402-allowance/dist/index.js';
+import { FreeAllowanceTracker, FREE_CALLS_PER_MONTH_AFTER_TOPUP } from '../packages/x402-allowance/dist/index.js';
 
 describe('FreeAllowanceTracker Unit & Invariant Tests', () => {
 
@@ -27,18 +27,18 @@ describe('FreeAllowanceTracker Unit & Invariant Tests', () => {
     assert.equal(status.remaining, 99);
   });
 
-  test('PACE LIMIT: 11th call in an hour is flagged and throttled', () => {
+  test('NO PACE CAP: Calls can be consumed at full speed without 10/hour throttling', () => {
     const tracker = new FreeAllowanceTracker();
     tracker.recordTopup('eip155:8453', '0x3333333333333333333333333333333333333333', 1_000_000);
 
-    for (let i = 0; i < FREE_CALLS_PER_HOUR; i++) {
+    for (let i = 0; i < 15; i++) {
       tracker.consumeAllowance('eip155:8453', '0x3333333333333333333333333333333333333333', 'agent-pace', 'pre_trade_check');
     }
 
-    const paceCheck = tracker.checkAllowance('eip155:8453', '0x3333333333333333333333333333333333333333');
-    assert.equal(paceCheck.hourlyAllowed, false, '11th call must be blocked by pace limiter');
-    assert(paceCheck.retryAfterSeconds > 0, 'Must provide retryAfterSeconds');
-    assert.equal(paceCheck.remaining, 90, 'Allowance remains 90 (not consumed on pace limit)');
+    const check = tracker.checkAllowance('eip155:8453', '0x3333333333333333333333333333333333333333');
+    assert.equal(check.hourlyAllowed, true, 'Calls must not be blocked by pace limiter');
+    assert.equal(check.retryAfterSeconds, 0, 'No retry delay');
+    assert.equal(check.remaining, 85, '15 calls consumed, remaining is 85');
   });
 
   test('EXISTING CREDIT: Wallets with existing topup in current month auto-qualify', () => {
