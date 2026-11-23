@@ -1,5 +1,5 @@
 # 📜 Sim Lab MCP Tool Catalog & Contract Schemas
-*Specification Version: 1.3.0 | Protocol: MCP (2025-07-09) over SSE & JSON-RPC 2.0*
+*Specification Version: 1.3.1 | Protocol: MCP (2025-07-09) over SSE & JSON-RPC 2.0*
 
 This document provides formal input/output contracts, parameter constraints, and error response schemas for all 12 Sim Lab Model Context Protocol (MCP) tools.
 

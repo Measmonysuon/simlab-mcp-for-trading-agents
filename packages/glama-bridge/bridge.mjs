@@ -51,7 +51,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 const NAME = 'simlab-glama-bridge';
-const VERSION = '1.3.0';
+const VERSION = '1.3.1';
 const DEFAULT_URL = 'https://simlab.measmony.me/mcp/sse';
 
 // stdout is the MCP channel — everything human-readable goes to stderr.
