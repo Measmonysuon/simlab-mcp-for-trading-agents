@@ -1,0 +1,21 @@
+# Smithery.ai Registry Manifest for Sim Lab Alpha Intelligence
+version: "1.0.0"
+server:
+  name: "simlab-alpha-intelligence"
+  title: "Sim Lab Alpha Intelligence — Pre-Trade Risk Firewall"
+  description: "Zero-hallucination pre-trade risk firewall & quantitative intelligence for AI trading agents. Real on-chain telemetry, dynamic SMA Golden Line entry bounds, in-trade dynamic exit sentinels, macro regime lockouts, institutional trap shield vetoes, and reproducible counterfactual replay benchmarks on Binance perpetual data."
+  repository: "https://github.com/Measmonysuon/simlab-mcp-for-trading-agents"
+  website: "https://alpha.measmony.me"
+  remote:
+    type: "sse"
+    url: "https://simlab.measmony.me/mcp/sse"
+    headers:
+      x-client-id:
+        description: "A stable identifier for your agent. Credit balance is bound to this id plus your wallet address."
+        required: true
+      x-wallet:
+        description: "Your Base (EVM) wallet address. Used with x-client-id to bind x402 top-up credit."
+        required: true
+      x-spend-key:
+        description: "Secret spend key issued upon x402 top-up settlement. Required for executing paid MCP tool calls."
+        required: false
