@@ -9,6 +9,7 @@
   <a href="https://www.x402.org"><img src="https://img.shields.io/badge/x402-On--Chain%20Micro--Payments-0052FF?style=for-the-badge&logo=ethereum&logoColor=white" alt="x402 Payments"></a>
   <a href="https://base.org"><img src="https://img.shields.io/badge/Settlement-Base%20Network%20(USDC)-0052FF?style=for-the-badge&logo=coinbase&logoColor=white" alt="Base Network"></a>
   <a href="https://solana.com"><img src="https://img.shields.io/badge/Settlement-Solana%20Pay%20(USDC)-14F195?style=for-the-badge&logo=solana&logoColor=black" alt="Solana Pay"></a>
+  <a href="https://huggingface.co/spaces/measmonysuon/simlab-trading-desk-mcp"><img src="https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces%20Live-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face Space"></a>
   <a href="packages/execution-guard"><img src="https://img.shields.io/badge/Execution%20Guard-Fail--Closed-FF4336?style=for-the-badge" alt="Fail-Closed Execution Guard"></a>
   <a href="proof/FLEET_PERFORMANCE.md"><img src="https://img.shields.io/badge/Fleet%20Telemetry-442%20Trades%20·%203.71%20PF-10B981?style=for-the-badge" alt="Real Production Telemetry"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-F5A623?style=for-the-badge" alt="MIT License"></a>
@@ -160,9 +161,13 @@ Sim Lab provides **Dual-Transport Support** for all AI clients:
 3. **Local Stdio Bridge**: Inspectable stdio wrapper via `@simlab/glama-bridge` for local Docker or CLI runners.
 
 ### Endpoints
-* **Streamable HTTP**: `https://simlab.measmony.me/mcp`
-* **SSE Transport**: `https://simlab.measmony.me/mcp/sse`
+* **Hugging Face Space (Hosted)**: `https://measmonysuon-simlab-trading-desk-mcp.hf.space`
+* **Hugging Face Streamable HTTP**: `https://measmonysuon-simlab-trading-desk-mcp.hf.space/mcp`
+* **Hugging Face SSE Transport**: `https://measmonysuon-simlab-trading-desk-mcp.hf.space/mcp/sse`
+* **Direct Streamable HTTP**: `https://alpha.measmony.me/mcp`
+* **Direct SSE Transport**: `https://simlab.measmony.me/mcp/sse`
 * **x402 Discovery & Bazaar**: `https://simlab.measmony.me/.well-known/x402`
+* **MCP Discovery Card**: `https://measmonysuon-simlab-trading-desk-mcp.hf.space/.well-known/mcp.json`
 
 ### 1. Claude Desktop Configuration
 Add Sim Lab to your `claude_desktop_config.json`:
