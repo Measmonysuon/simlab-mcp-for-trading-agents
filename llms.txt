@@ -3,64 +3,62 @@
 Sim Lab is a domain-specialized quantitative AI intelligence layer and
 zero-hallucination pre-trade risk firewall for perpetual futures trading agents.
 Grounded in real on-chain execution telemetry (442+ closed trades, 65.3% win rate,
-3.71 PF) and multi-layer phase filtering. Accessible via MCP over SSE at
-https://simlab.measmony.me/mcp/sse.
+3.71 PF) and multi-layer phase filtering. Accessible via Dual-Transport:
+- Remote Streamable HTTP (JSON-RPC over POST): https://simlab.measmony.me/mcp
+- Remote Server-Sent Events (SSE): https://simlab.measmony.me/mcp/sse
+- x402 v2 Bazaar Discovery: https://simlab.measmony.me/.well-known/x402
 It supplies mathematical decision support only; execution is handled by your agent.
 
 ## Route by your goal
+- Open a trade with unified verdict, safe leverage, entry bounds, SL, & TP -> pre_trade_gate(symbol, side, leverage?, notionalUsd?) [PRIMARY ATOMIC GATE, $0.05]
+- Verify track record, win rate, & trap shield efficacy for free -> get_performance_audit() [FREE, $0.00, keyless]
 - Decide whether to trade at all now -> get_market_regime (free headline)
-- Find candidate pairs -> get_top_picks, then get_harvest_targets(symbol)
-- Check a pair is allowed -> check_pair_directive(symbol)
-- Check a planned entry is safe -> pre_trade_check(symbol, action) [MANDATORY before entries]
-- Get trap evidence only -> evaluate_trap_shield(symbol, action)
-- Get raw flow inputs for your own model -> get_market_microstructure(symbol)
-- Time an island/retest setup -> get_robust_island_status(symbol)
-- Align with the production fleet's strategy -> get_active_strategy
-- Load all intelligence at once -> get_alpha_bundle
+- Check a planned entry against full multi-layer vetoes -> pre_trade_check(symbol, side) [$0.15]
+- Time moving baseline & retest absorption health -> get_golden_entry(symbol) [$0.03]
+- In-trade adaptive profit guardian & trailing stop ratchet -> evaluate_dynamic_exit(symbol, side, entryPrice, currentPrice) [$0.01]
+- Amber Band 2-stage gap harvest targets -> get_harvest_targets(symbol) [$0.05]
+- Check candidate pairs clearing quantitative score gates -> get_top_picks() [$0.05]
+- Check whether pair is quarantined or directionally banned -> check_pair_directive(symbol) [$0.05]
+- Deep adversarial trap analysis (VPIN toxicity, L2 spoof walls, CVD flow) -> evaluate_trap_shield(symbol) [$0.10]
+- Raw microstructure analytics (Shannon entropy, depth ratio, taker flow) -> get_market_microstructure(symbol) [$0.05]
+- Counterfactual historical benchmark replay referee on Binance perps -> simulate_historical_veto(symbol, timestamp, side) [FREE, $0.00]
+- Load complete alpha intelligence bundle across all tracked markets -> get_alpha_bundle() [$0.15]
 
 ## Rules that protect your principal
-- A VETO from pre_trade_check or evaluate_trap_shield is final for that
-  symbol+side at that time. Do not re-ask a different tool to override it.
-- A regime event freeze or side ban overrides any local signal.
-- Every response carries asOf. Disclose staleness; never trade on silently
-  stale intelligence.
+- A VETO from pre_trade_gate or pre_trade_check is final for that symbol+side. Do not hallucinate overrides.
+- Zero-Charge Guarantee: If an unmonitored symbol is requested or if market telemetry is stale (>45s), Sim Lab aborts with ZERO charge.
+- Idempotency: Pass header `x-idempotency-key` on requests. Retried calls return cached results with zero duplicate charges.
+- A macro regime event freeze or side ban overrides any local signal.
+- Every response carries asOf. Disclose staleness; never trade on silently stale intelligence.
 
-## Identity & Session Security
-Send on every request (both GET /mcp/sse and all POST /mcp/messages calls):
-header x-client-id (a stable id e.g. UUID v4), x-wallet (your Base wallet address),
-and x-spend-key (secret spend key issued on top-up settlement).
-The server enforces session-binding and spend-key authorization: message POSTs must
-match the bound session, and paid calls require a valid spend key matching the
-cryptographic SHA-256 hash on file. This strictly prevents unauthorized spending even if
-your client-id and wallet pair become known. Rotate or recover key via POST /x402/spend-key/rotate.
+## Identity & Transport Security
+Connect via:
+1. Streamable HTTP: POST https://simlab.measmony.me/mcp (Stateless JSON-RPC 2.0)
+2. Remote SSE: GET https://simlab.measmony.me/mcp/sse (Persistent stream)
+
+Send on every request:
+- `x-client-id`: stable agent identifier (e.g. UUID v4)
+- `x-wallet`: Base (EVM) or Solana wallet address
+- `x-spend-key`: secret spend key issued on top-up settlement
+- `x-idempotency-key` (optional): request nonce for safe replay
 
 ## Payment
-- Free headline: get_market_regime HEADLINE only (regime name + bias + asOf +
-  count of active restrictions). 300 calls/month cap, keyless.
-- $1 Unlock: Any top-up of $1 or more in a calendar month unlocks 100 free
-  priced tool calls for that month (any priced tool, max 10 free calls/hr per wallet).
-- After the 100 free calls, normal pay-per-call resumes from prepaid credit, then 402.
-- Unpaid evaluative calls return error -32042 with a teaser: a real
-  coarse risk band, verdict withheld. Teasers are never fabricated.
-- Paid tools: USDC on Base mainnet via x402, or Solana Pay (SPL USDC), or licence key.
-  Prices (USD): dynamic_exit 0.01, regime 0.02, golden_entry 0.03,
-  top_picks 0.05, harvest_targets 0.05, pair_directive 0.05,
-  microstructure 0.05, robust_island 0.05, active_strategy 0.05,
-  trap_shield 0.10, alpha_bundle 0.15, pre_trade_check 0.15.
-  Historical benchmark (simulate_historical_veto) is free ($0.00).
-- Packs: $1 Trial ($1 in, $1 of credit, plus 100 free calls that month) ·
-  $10 Bot (+5% bonus credit) · $50 Fleet (+10% bonus credit).
-- Error -32042 means insufficient credit: POST /x402/topup (Base) or
-  POST /x402/solana/request (Solana Pay), then retry the call.
+- Free headline: get_market_regime HEADLINE only (regime name + bias + asOf + count of active restrictions). 300 calls/month cap, keyless.
+- Free Performance Audit: get_performance_audit() returns sovereign verified track record (442 closed trades, 65.3% win rate, 3.71 PF, 80 true traps caught) with SHA-256 integrity stamp. Completely free ($0.00).
+- $1 Unlock: Any top-up of $1 or more in a calendar month unlocks 100 free priced tool calls for that month across all paid tools.
+- After the 100 free calls, normal pay-per-call resumes from prepaid credit, then HTTP 402 Payment Required.
+- Unpaid calls return error -32042 with a real teaser risk band (verdict withheld) and HTTP 402 PAYMENT-REQUIRED header embedding x402 v2 Bazaar extension schemas.
+- Paid tools: USDC on Base mainnet via x402, or Solana Pay (SPL USDC), or fleet licence key.
+  Prices (USD): dynamic_exit 0.01, regime 0.02, golden_entry 0.03, pre_trade_gate 0.05,
+  top_picks 0.05, harvest_targets 0.05, pair_directive 0.05, microstructure 0.05,
+  robust_island 0.05, active_strategy 0.05, trap_shield 0.10, alpha_bundle 0.15, pre_trade_check 0.15.
+- Error -32042 means insufficient credit: POST /x402/topup (Base) or POST /x402/solana/request (Solana Pay).
   Credits never expire.
-- Live prices and full details (source of truth):
-  GET https://simlab.measmony.me/x402/info
+- Live prices and discovery: GET https://simlab.measmony.me/.well-known/x402
 
-## Proof (verify before you trust)
-- Fleet record and current strategy: call get_active_strategy, or read
-  the proof block in GET /x402/info.
-- Settlement receipts: see proof/RECEIPTS.md in the GitHub repo
-  (github.com/Measmonysuon/simlab-mcp-for-trading-agents).
+## Verifiable Proof & Attestation
+- Live proof board: https://simlab.measmony.me/commons/
+- Machine-readable proof feed: https://simlab.measmony.me/proof/feed.json
+- Open-source MCP repository: https://github.com/Measmonysuon/simlab-mcp-for-trading-agents
 - Operator: Telegram @measmonysuon · alpha@measmony.me
-- Intelligence for trading decision support. Not financial advice.
-  No guaranteed performance.
+- Intelligence for trading decision support. Not financial advice. No guaranteed performance.
