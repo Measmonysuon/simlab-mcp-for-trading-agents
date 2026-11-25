@@ -22,10 +22,46 @@
                     "isRequired": false,
                     "name": "x-spend-key",
                     "placeholder": "sk_spend_..."
+                },
+                {
+                    "description": "Optional idempotency key to prevent double charging on retry.",
+                    "isRequired": false,
+                    "name": "x-idempotency-key",
+                    "placeholder": "req_unique_nonce_123"
                 }
             ],
             "type": "sse",
             "url": "https://simlab.measmony.me/mcp/sse"
+        },
+        {
+            "headers": [
+                {
+                    "description": "A stable identifier for your agent.",
+                    "isRequired": true,
+                    "name": "x-client-id",
+                    "placeholder": "your-agent-name"
+                },
+                {
+                    "description": "Your Base (EVM) wallet address.",
+                    "isRequired": true,
+                    "name": "x-wallet",
+                    "placeholder": "0xYourBaseWalletAddress"
+                },
+                {
+                    "description": "Secret spend key issued upon x402 top-up settlement.",
+                    "isRequired": false,
+                    "name": "x-spend-key",
+                    "placeholder": "sk_spend_..."
+                },
+                {
+                    "description": "Optional idempotency key to prevent double charging on retry.",
+                    "isRequired": false,
+                    "name": "x-idempotency-key",
+                    "placeholder": "req_unique_nonce_123"
+                }
+            ],
+            "type": "http",
+            "url": "https://simlab.measmony.me/mcp"
         }
     ],
     "repository": {

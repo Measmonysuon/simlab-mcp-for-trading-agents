@@ -19,3 +19,6 @@ server:
       x-spend-key:
         description: "Secret spend key issued upon x402 top-up settlement. Required for executing paid MCP tool calls."
         required: false
+      x-idempotency-key:
+        description: "Optional idempotency key to prevent double charging on retry."
+        required: false

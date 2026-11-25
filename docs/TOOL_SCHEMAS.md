@@ -18,6 +18,105 @@ This document provides formal input/output contracts, parameter constraints, and
 
 ## 🛠️ Tool Catalog & Input / Output Contracts
 
+### 0. `pre_trade_gate` (Decision-Ready Atomic Execution Gate)
+* **Pricing**: $0.05 USDC (or 1 free allowance unit)
+* **Purpose**: Single atomic pre-trade gate. Returns Pass/Fail verdict, safe leverage, entry zone, dynamic ATR stop-loss, and 2-stage Amber Band take-profit targets in a single decision-ready response. Eliminates chaining multiple tools to save latency and fees.
+
+#### Input Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Perpetual trading pair (e.g. SOL/USD, ETH/USD, BTC/USD, SUI/USD, APT/USD)"
+    },
+    "side": {
+      "type": "string",
+      "enum": ["LONG", "SHORT"],
+      "description": "Proposed trade direction"
+    },
+    "leverage": {
+      "type": "number",
+      "description": "Proposed leverage multiple (optional, e.g. 5 for 5x)"
+    },
+    "notionalUsd": {
+      "type": "number",
+      "description": "Proposed trade notional in USD (optional, e.g. 500)"
+    }
+  },
+  "required": ["symbol", "side"]
+}
+```
+
+#### Output Schema
+```json
+{
+  "symbol": "SOL/USD",
+  "candidateAction": "LONG",
+  "approved": true,
+  "verdict": "ALLOW",
+  "riskBand": "LOW",
+  "summaryReason": "APPROVED for LONG entry: Retest absorption healthy (84/100) with clean L2 orderbook balance and low VPIN toxicity (0.16).",
+  "executionLimits": {
+    "requestedLeverage": 5,
+    "safeLeverage": 5,
+    "maxPositionNotionalUsd": 500,
+    "recommendedStance": "ACCELERATED_FIRST"
+  },
+  "entryZone": {
+    "currentPrice": 218.45,
+    "movingBaselineSma": 217.80,
+    "entryMin": 217.04,
+    "entryMax": 218.56,
+    "retestHealthScore": 84,
+    "retestState": "RETEST_CONFIRMED"
+  },
+  "exitPlan": {
+    "stopLoss": {
+      "price": 213.90,
+      "distancePct": 2.08,
+      "type": "DYNAMIC_ATR_TRAILING",
+      "ratchetOnTier1": "BREAKEVEN_LOCK"
+    },
+    "takeProfitTargets": {
+      "tier1AmberBand": {
+        "price": 223.14,
+        "scaleOutPct": 30,
+        "action": "Bank 30% cash and ratchet stop-loss to entry price"
+      },
+      "tier2TerminalMidpoint": {
+        "price": 226.10,
+        "scaleOutPct": 70,
+        "action": "Close remaining 70% runner at terminal midpoint touch"
+      }
+    }
+  }
+}
+```
+
+---
+
+### 0.1 `get_performance_audit` (Verifiable Sovereign Track Record)
+* **Pricing**: $0.00 (Free, keyless, zero allowance consumed)
+* **Purpose**: Machine-readable track record and proof-of-alpha. Returns fleet win rates, profit factor, verified shadow vetoes, and cryptographic SHA-256 attestation hash.
+
+#### Input Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "tier": {
+      "type": "string",
+      "enum": ["summary", "detailed", "ground_truth"],
+      "description": "Detail tier"
+    }
+  }
+}
+```
+
+---
+
 ### 1. `pre_trade_check` (Master Risk Firewall)
 * **Pricing**: $0.15 USDC (x402)
 * **Purpose**: Authoritative pre-trade decision combining regime, historical pair quarantine, and order flow microstructure.

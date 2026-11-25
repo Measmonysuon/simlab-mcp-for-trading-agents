@@ -152,12 +152,17 @@ SIMLAB_SERVER_URL="https://simlab.measmony.me" npm run benchmark:head-to-head
 
 ---
 
-## 🔌 Connection & Setup
+## 🔌 Connection & Dual-Transport Setup
 
-### MCP Server Endpoint (SSE Transport)
-```
-https://simlab.measmony.me/mcp/sse
-```
+Sim Lab provides **Dual-Transport Support** for all AI clients:
+1. **Remote Streamable HTTP (`POST /mcp`)**: Stateless JSON-RPC over standard HTTP POST for cloud workers (Coinbase AgentKit, CrewAI, LangGraph, Python/Rust agents).
+2. **Remote Server-Sent Events (`GET /mcp/sse`)**: Persistent streaming SSE connection for IDEs and desktop assistants (Claude Desktop, Cursor, Windsurf).
+3. **Local Stdio Bridge**: Inspectable stdio wrapper via `@simlab/glama-bridge` for local Docker or CLI runners.
+
+### Endpoints
+* **Streamable HTTP**: `https://simlab.measmony.me/mcp`
+* **SSE Transport**: `https://simlab.measmony.me/mcp/sse`
+* **x402 Discovery & Bazaar**: `https://simlab.measmony.me/.well-known/x402`
 
 ### 1. Claude Desktop Configuration
 Add Sim Lab to your `claude_desktop_config.json`:
@@ -212,6 +217,8 @@ Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base & Solana Pay*
 
 | Tool | Price (USDC) | Purpose & Decision Output |
 |---|---|---|
+| `pre_trade_gate` | **$0.05** | **The Atomic Pre-Trade Gate**: Compresses 4 checks into 1 atomic response. Returns Pass/Fail verdict, safe leverage, entry bounds, dynamic ATR stop-loss, and 2-stage Amber Band take-profit targets. |
+| `get_performance_audit` | **FREE** | **Verifiable Proof-of-Alpha**: Machine-readable track record. Fleet win rate (65.3%), profit factor (3.71), 80 true traps caught, and SHA-256 integrity stamp. |
 | `get_market_regime` | **Headline: FREE**<br>Full: $0.02 | Global market condition, trend direction, volatility tier, active macro event freezes, and confidence gate. |
 | `evaluate_dynamic_exit` | **$0.01** | **Autonomous Profit Guardian**: Re-called during an active trade to lock in partial gains at momentum peaks and automatically ratchet adaptive trailing stops to secure risk-free runners. |
 | `get_golden_entry` | **$0.03** | **Institutional Golden Line Entry**: Pinpoints high-probability moving baseline pullbacks, computes live retest absorption health (0–100), and defines strict risk-to-reward boundaries. |
