@@ -24,31 +24,31 @@
                     "placeholder": "sk_spend_..."
                 },
                 {
-                    "description": "Optional idempotency key to prevent double charging on retry.",
+                    "description": "Payment identifier or idempotency key to prevent double charging on retry.",
                     "isRequired": false,
-                    "name": "x-idempotency-key",
+                    "name": "payment-identifier",
                     "placeholder": "req_unique_nonce_123"
                 }
             ],
-            "type": "sse",
-            "url": "https://simlab.measmony.me/mcp/sse"
+            "type": "http",
+            "url": "https://simlab.measmony.me/mcp"
         },
         {
             "headers": [
                 {
-                    "description": "A stable identifier for your agent.",
+                    "description": "A stable identifier for your agent. Your Sim Lab credit balance is bound to this id plus your wallet address — keep it stable and unguessable.",
                     "isRequired": true,
                     "name": "x-client-id",
                     "placeholder": "your-agent-name"
                 },
                 {
-                    "description": "Your Base (EVM) wallet address.",
+                    "description": "Your Base (EVM) wallet address. Used with x-client-id to bind x402 top-up credit. Licence-key holders may send Authorization: Bearer <key> instead.",
                     "isRequired": true,
                     "name": "x-wallet",
                     "placeholder": "0xYourBaseWalletAddress"
                 },
                 {
-                    "description": "Secret spend key issued upon x402 top-up settlement.",
+                    "description": "Secret spend key issued upon x402 top-up settlement. Required for executing paid MCP tool calls and protecting prepaid balance. Recoverable via POST /x402/spend-key/rotate.",
                     "isRequired": false,
                     "name": "x-spend-key",
                     "placeholder": "sk_spend_..."
@@ -60,8 +60,8 @@
                     "placeholder": "req_unique_nonce_123"
                 }
             ],
-            "type": "http",
-            "url": "https://simlab.measmony.me/mcp"
+            "type": "sse",
+            "url": "https://simlab.measmony.me/mcp/sse"
         }
     ],
     "repository": {

@@ -10,7 +10,7 @@ Grounded in real on-chain execution telemetry (442+ closed trades, 65.3% win rat
 It supplies mathematical decision support only; execution is handled by your agent.
 
 ## Route by your goal
-- Open a trade with unified verdict, safe leverage, entry bounds, SL, & TP -> pre_trade_gate(symbol, side, leverage?, notionalUsd?) [PRIMARY ATOMIC GATE, $0.05]
+- Open a trade with unified verdict, safe leverage, entry bounds, SL, & TP -> validate_trade_execution (alias: pre_trade_gate)(symbol, side, leverage?, notionalUsd?) [PRIMARY ATOMIC GATE, $0.05]
 - Verify track record, win rate, & trap shield efficacy for free -> get_performance_audit() [FREE, $0.00, keyless]
 - Decide whether to trade at all now -> get_market_regime (free headline)
 - Check a planned entry against full multi-layer vetoes -> pre_trade_check(symbol, side) [$0.15]
@@ -27,7 +27,7 @@ It supplies mathematical decision support only; execution is handled by your age
 ## Rules that protect your principal
 - A VETO from pre_trade_gate or pre_trade_check is final for that symbol+side. Do not hallucinate overrides.
 - Zero-Charge Guarantee: If an unmonitored symbol is requested or if market telemetry is stale (>45s), Sim Lab aborts with ZERO charge.
-- Idempotency: Pass header `x-idempotency-key` on requests. Retried calls return cached results with zero duplicate charges.
+- Idempotency: Pass header `payment-identifier` or `x-idempotency-key` on requests. Retried calls return cached results with zero duplicate charges.
 - A macro regime event freeze or side ban overrides any local signal.
 - Every response carries asOf. Disclose staleness; never trade on silently stale intelligence.
 
@@ -40,7 +40,7 @@ Send on every request:
 - `x-client-id`: stable agent identifier (e.g. UUID v4)
 - `x-wallet`: Base (EVM) or Solana wallet address
 - `x-spend-key`: secret spend key issued on top-up settlement
-- `x-idempotency-key` (optional): request nonce for safe replay
+- `payment-identifier` or `x-idempotency-key` (optional): request nonce for safe replay
 
 ## Payment
 - Free headline: get_market_regime HEADLINE only (regime name + bias + asOf + count of active restrictions). 300 calls/month cap, keyless.
@@ -49,7 +49,7 @@ Send on every request:
 - After the 100 free calls, normal pay-per-call resumes from prepaid credit, then HTTP 402 Payment Required.
 - Unpaid calls return error -32042 with a real teaser risk band (verdict withheld) and HTTP 402 PAYMENT-REQUIRED header embedding x402 v2 Bazaar extension schemas.
 - Paid tools: USDC on Base mainnet via x402, or Solana Pay (SPL USDC), or fleet licence key.
-  Prices (USD): dynamic_exit 0.01, regime 0.02, golden_entry 0.03, pre_trade_gate 0.05,
+  Prices (USD): dynamic_exit 0.01, regime 0.02, golden_entry 0.03, validate_trade_execution 0.05, pre_trade_gate 0.05,
   top_picks 0.05, harvest_targets 0.05, pair_directive 0.05, microstructure 0.05,
   robust_island 0.05, active_strategy 0.05, trap_shield 0.10, alpha_bundle 0.15, pre_trade_check 0.15.
 - Error -32042 means insufficient credit: POST /x402/topup (Base) or POST /x402/solana/request (Solana Pay).
@@ -58,6 +58,7 @@ Send on every request:
 
 ## Verifiable Proof & Attestation
 - Live proof board: https://simlab.measmony.me/commons/
+- Live AI Agent Telemetry & Transport Radar: https://alpha.measmony.me/#agent-telemetry-directory (GET https://simlab.measmony.me/x402/visitors)
 - Machine-readable proof feed: https://simlab.measmony.me/proof/feed.json
 - Open-source MCP repository: https://github.com/Measmonysuon/simlab-mcp-for-trading-agents
 - Operator: Telegram @measmonysuon · alpha@measmony.me

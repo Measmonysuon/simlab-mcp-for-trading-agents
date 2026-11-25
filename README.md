@@ -217,7 +217,7 @@ Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base & Solana Pay*
 
 | Tool | Price (USDC) | Purpose & Decision Output |
 |---|---|---|
-| `pre_trade_gate` | **$0.05** | **The Atomic Pre-Trade Gate**: Compresses 4 checks into 1 atomic response. Returns Pass/Fail verdict, safe leverage, entry bounds, dynamic ATR stop-loss, and 2-stage Amber Band take-profit targets. |
+| `validate_trade_execution` (or `pre_trade_gate`) | **$0.05** | **The Atomic Pre-Trade Gate**: Compresses 4 checks into 1 atomic response. Returns Pass/Fail verdict, safe leverage, entry bounds, dynamic ATR stop-loss, and 2-stage Amber Band take-profit targets. |
 | `get_performance_audit` | **FREE** | **Verifiable Proof-of-Alpha**: Machine-readable track record. Fleet win rate (65.3%), profit factor (3.71), 80 true traps caught, and SHA-256 integrity stamp. |
 | `get_market_regime` | **Headline: FREE**<br>Full: $0.02 | Global market condition, trend direction, volatility tier, active macro event freezes, and confidence gate. |
 | `evaluate_dynamic_exit` | **$0.01** | **Autonomous Profit Guardian**: Re-called during an active trade to lock in partial gains at momentum peaks and automatically ratchet adaptive trailing stops to secure risk-free runners. |
