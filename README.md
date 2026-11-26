@@ -216,6 +216,20 @@ Add to `.cursor/mcp.json` or global MCP settings:
 
 ---
 
+## 🤖 Drop-in Integrations for Trading Bots & Agents
+
+SimLab includes zero-dependency, copy-pasteable guards for the world's most popular quantitative frameworks:
+
+| Framework / Ecosystem | Drop-in File | Integration Hook | Protection Provided |
+| :--- | :--- | :--- | :--- |
+| **Freqtrade** | [`examples/freqtrade_simlab_guard.py`](examples/freqtrade_simlab_guard.py) | `confirm_trade_entry()` | Sub-second VPIN toxicity veto, spoof wall traps, fail-open safety |
+| **Hummingbot** | [`examples/hummingbot_simlab_guard.py`](examples/hummingbot_simlab_guard.py) | `on_tick()` | Adverse selection shield, spread widening on toxic volume sweeps |
+| **TradingView Alerts** | [`examples/tradingview_webhook_firewall.py`](examples/tradingview_webhook_firewall.py) | Webhook Receiver (HTTP) | Intercepts PineScript alerts before forwarding to Binance/Bybit |
+| **ElizaOS & AgentKit** | [`examples/eliza_agentkit_guard.ts`](examples/eliza_agentkit_guard.ts) | Agent Action / Plugin | Evaluates DEX swaps & perps before autonomous transaction signing |
+| **Python Quants** | [`autonomous_trading_guard_bot.py`](autonomous_trading_guard_bot.py) | Direct REST / MCP client | 60-second quickstart reference bot with automated regime check |
+
+---
+
 ## 🛠️ Complete MCP Tool Catalog & Pricing
 
 Sim Lab uses **x402 Pay-Per-Call** micro-billing in **USDC on Base & Solana Pay**. The market regime headline is completely free; actionable intelligence tools are billed per call with zero monthly commitments. **Credits never expire, and failed calls are never charged.**
