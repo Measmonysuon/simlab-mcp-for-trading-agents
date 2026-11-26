@@ -287,6 +287,7 @@ Sim Lab requires **no accounts, no passwords, and no credit cards**. Micro-credi
 ### 🤖 Autonomous Reference Bots & Quickstarts
 * ⚡ **[60-Second Agent Quickstart](docs/MCP_QUICKSTART_60S.md)**: Instant connection configurations for Cursor IDE, Claude Desktop, and LangChain.
 * 🛡️ **[Python Autonomous Guard Bot](examples/autonomous_trading_guard_bot.py)**: Zero-dependency reference implementation demonstrating the 2-step trading guard pattern (`get_market_regime` & `pre_trade_check`) with x402 teaser handling.
+* 📈 **[Freqtrade Strategy Risk Interceptor](examples/freqtrade_simlab_guard.py)**: Drop-in risk firewall for Freqtrade bots hooking into `confirm_trade_entry()` to veto toxic order flow.
 * 💳 **[USDC Top-Up & Micro-Payment Clients](examples/)**: Working implementations for Base Mainnet (EIP-3009) and Solana Pay ([topup-and-check-solana.ts](examples/topup-and-check-solana.ts), [topup-and-check.py](examples/topup-and-check.py)).
 
 ---
